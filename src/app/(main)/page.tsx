@@ -1,10 +1,15 @@
-import { Button } from "@nextui-org/react";
-import Image from "next/image";
+import Banner from "@/components/pages/home/Banner";
+import TopRatedCarousel from "@/components/pages/home/TopRatedCarousel";
 
 export default function Home() {
   return (
-    <div>
-      <h1 className="text-red-500">Home</h1>
-    </div>
+    <>
+      <div>
+        <Banner />
+      </div>
+      <div className="p-6">
+        <TopRatedCarousel />
+      </div>
+    </>
   );
 }

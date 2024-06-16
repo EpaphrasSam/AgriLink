@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
+import "react-multi-carousel/lib/styles.css";
 import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
