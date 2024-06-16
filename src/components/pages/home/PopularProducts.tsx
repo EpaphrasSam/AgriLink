@@ -7,6 +7,7 @@ import {
   CustomRightArrow,
 } from "@/components/global/CustomArrows";
 import Carousel from "react-multi-carousel";
+import CardItems from "@/components/global/CardItems";
 
 const responsive = {
   LargeDesktop: {
@@ -31,7 +32,7 @@ const responsive = {
   },
 };
 
-const TopRatedCarousel = () => {
+const PopularProducts = () => {
   const items = [
     {
       id: 1,
@@ -83,27 +84,11 @@ const TopRatedCarousel = () => {
         swipeable
       >
         {items.map((item) => (
-          <div key={item.id} className="flex justify-center m-2">
-            <Card className="w-[250px] h-[300px]" isPressable>
-              <CardBody className="p-0 overflow-visible">
-                <Image
-                  shadow="sm"
-                  width="100%"
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-contain"
-                />
-              </CardBody>
-              <CardFooter className="mt-2 text-center flex flex-col gap-2">
-                <h2 className="text-xl font-bold">{item.title}</h2>
-                <p className="text-gray-600">{item.description}</p>
-              </CardFooter>
-            </Card>
-          </div>
+          <CardItems key={item.id} item={item} />
         ))}
       </Carousel>
     </div>
   );
 };
 
-export default TopRatedCarousel;
+export default PopularProducts;
