@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react";
 import ProductFilters from "./ProductFilters";
 import ProductGrid from "./ProductGrid";
+import { Product } from "@/types/ProductTypes";
 
-const products = [
+const products: Product[] = [
   {
     id: 1,
     title: "Strawberries",

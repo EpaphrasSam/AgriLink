@@ -8,6 +8,7 @@ import {
 } from "@/components/global/CustomArrows";
 import Carousel from "react-multi-carousel";
 import CardItems from "@/components/global/CardItems";
+import { Product } from "@/types/ProductTypes";
 
 const responsive = {
   LargeDesktop: {
@@ -33,39 +34,40 @@ const responsive = {
 };
 
 const PopularProducts = () => {
-  const items = [
+  const products: Product[] = [
     {
       id: 1,
-      title: "Farmer John",
-      description: "Top-rated farmer with the best organic produce.",
+      title: "Strawberries",
+      category: "Fruit",
+      price: 5.99,
+      rating: 4,
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
     },
     {
       id: 2,
-      title: "Fresh Apples",
-      description: "Crisp and delicious apples from the best orchards.",
+      title: "Carrots",
+      category: "Vegetables",
+      price: 2.99,
+      rating: 5,
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
     },
     {
       id: 3,
-      title: "Organic Carrots",
-      description: "Sweet and crunchy organic carrots.",
+      title: "Milk",
+      category: "Dairy",
+      price: 3.99,
+      rating: 3,
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
     },
     {
       id: 4,
-      title: "Organic Carrots",
-      description: "Sweet and crunchy organic carrots.",
-      image:
-        "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
-    },
-    {
-      id: 5,
-      title: "Organic Carrots",
-      description: "Sweet and crunchy organic carrots.",
+      title: "Orange",
+      category: "Fruit",
+      price: 10.99,
+      rating: 4,
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
     },
@@ -83,8 +85,8 @@ const PopularProducts = () => {
         customRightArrow={<CustomRightArrow />}
         swipeable
       >
-        {items.map((item) => (
-          <CardItems key={item.id} item={item} />
+        {products.map((product) => (
+          <CardItems key={product.id} product={product} />
         ))}
       </Carousel>
     </div>
