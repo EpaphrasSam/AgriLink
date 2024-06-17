@@ -14,7 +14,9 @@ const ProductGrid = ({ products }: any) => {
     <div className="w-full p-4">
       {Object.keys(categorizedProducts).map((category) => (
         <div key={category} className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">{category}</h2>
+          <h2 className="text-2xl font-bold sticky top-0 bg-white pb-2 z-20">
+            {category}
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {categorizedProducts[category].map((product: any) => (
               <CardItems key={product.id} item={product} />

@@ -19,7 +19,7 @@ const ProductFilters = ({
 
   const handleRatingChange = (rating: any) => {
     const currentRating = filters.ratings[0];
-    if (rating === 1 && currentRating === 1) return; // Prevent deselecting the lowest rating
+    if (rating === 1 && currentRating === 1) return;
 
     setFilters((prev: any) => ({
       ...prev,
@@ -38,8 +38,8 @@ const ProductFilters = ({
     <div className="w-full p-4">
       <h2 className="text-2xl font-bold">Filters</h2>
       <Divider className="my-4" />
-      <div className="flex flex-col gap-8">
-        <div className="mb-4">
+      <div className="flex md:flex-col flex-row max-md:overflow-x-auto gap-8">
+        <div className="mb-4 max-md:min-w-[200px]">
           <div>
             <h3 className="text-lg font-semibold mb-2">Categories</h3>
             <div className="flex flex-wrap gap-2">
@@ -60,24 +60,27 @@ const ProductFilters = ({
             </div>
           </div>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 max-md:min-w-[200px]">
           <div>
-            <h3 className="text-lg font-semibold mb-2">Price Range</h3>
             <Slider
               size="sm"
               showOutline
               showTooltip
-              aria-label="Price Range"
+              label="Price"
               minValue={priceRange[0]}
               maxValue={priceRange[1]}
               step={0.1}
               formatOptions={{ style: "currency", currency: "GHS" }}
-              value={filters.priceRange}
+              value={[filters.priceRange[0], filters.priceRange[1]]}
               onChange={handlePriceChange}
+              classNames={{
+                label: "text-lg font-semibold mb-2",
+                value: "text-xs font-semibold mb-2",
+              }}
             />
           </div>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 max-md:min-w-[200px]">
           <div>
             <h3 className="text-lg font-semibold mb-2">Ratings</h3>
             <div className="flex items-center gap-1 cursor-pointer">

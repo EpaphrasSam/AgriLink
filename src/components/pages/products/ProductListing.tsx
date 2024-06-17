@@ -77,7 +77,7 @@ const ProductListing = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="max-md:w-1/4">
+      <div className="w-full md:w-1/4">
         <ProductFilters
           products={products}
           filters={filters}
