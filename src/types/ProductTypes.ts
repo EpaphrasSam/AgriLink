@@ -5,6 +5,8 @@ export type Product = {
   price: number;
   rating: number;
   image: string;
+  farm: string;
+  
 };
 
 

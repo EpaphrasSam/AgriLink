@@ -7,6 +7,7 @@ import {
   CustomRightArrow,
 } from "@/components/global/CustomArrows";
 import Carousel from "react-multi-carousel";
+import { MdStarRate } from "react-icons/md";
 
 const responsive = {
   LargeDesktop: {
@@ -30,6 +31,9 @@ const responsive = {
     items: 1,
   },
 };
+const handleClick = () => {
+  console.log("clicked");
+};
 
 const TopRatedCarousel = () => {
   const items = [
@@ -39,6 +43,8 @@ const TopRatedCarousel = () => {
       description: "Top-rated farmer with the best organic produce.",
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+      town: "Accra",
+      region: "Greater Accra",
     },
     {
       id: 2,
@@ -46,6 +52,8 @@ const TopRatedCarousel = () => {
       description: "Crisp and delicious apples from the best orchards.",
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+      town: "Accra",
+      region: "Greater Accra",
     },
     {
       id: 3,
@@ -53,6 +61,8 @@ const TopRatedCarousel = () => {
       description: "Sweet and crunchy organic carrots.",
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+      town: "Accra",
+      region: "Greater Accra",
     },
     {
       id: 4,
@@ -60,6 +70,8 @@ const TopRatedCarousel = () => {
       description: "Sweet and crunchy organic carrots.",
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+      town: "Accra",
+      region: "Greater Accra",
     },
     {
       id: 5,
@@ -67,6 +79,8 @@ const TopRatedCarousel = () => {
       description: "Sweet and crunchy organic carrots.",
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+      town: "Accra",
+      region: "Greater Accra",
     },
   ];
 
@@ -75,30 +89,37 @@ const TopRatedCarousel = () => {
       <Carousel
         responsive={responsive}
         ssr={true}
-        // autoPlay
-        // autoPlaySpeed={3000}
-        // infinite
         customLeftArrow={<CustomLeftArrow />}
         customRightArrow={<CustomRightArrow />}
         swipeable
       >
         {items.map((item) => (
-          <div key={item.id} className="flex justify-center m-2">
-            <Card className="w-[250px] h-[300px]" isPressable>
-              <CardBody className="p-0 overflow-visible">
-                <Image
-                  shadow="sm"
-                  width="100%"
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-contain"
-                />
-              </CardBody>
-              <CardFooter className="mt-2 text-center flex flex-col gap-2">
-                <h2 className="text-xl font-bold">{item.title}</h2>
-                <p className="text-gray-600">{item.description}</p>
-              </CardFooter>
-            </Card>
+          <div
+            key={item.id}
+            className="flex flex-col justify-center m-2 cursor-pointer "
+            onClick={handleClick}
+          >
+            <div className="max-w-md rounded-lg overflow-hidden shadow-sm bg-white ">
+              <Image
+                src={item.image}
+                alt="Sunrise Orchard"
+                width="100%"
+                height={300} // Fixed height for consistent design
+                className="w-full object-cover"
+              />
+            </div>
+            <div className="px-6 py-4">
+              <p className="font-bold text-xl ">{item.title}</p>
+              <p className="text-gray-700 text-base">
+                {item.town}, {item.region}
+              </p>
+              <div className="flex items-center space-x-2">
+                <MdStarRate className="text-yellow-400 text-md" />
+                <span className="text-md font-semibold text-yellow-600">
+                  4.5
+                </span>
+              </div>
+            </div>
           </div>
         ))}
       </Carousel>

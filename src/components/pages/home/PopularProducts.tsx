@@ -43,6 +43,7 @@ const PopularProducts = () => {
       rating: 4,
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+      farm: "Vickys farm",
     },
     {
       id: 2,
@@ -52,6 +53,7 @@ const PopularProducts = () => {
       rating: 5,
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+      farm: "Vickys farm",
     },
     {
       id: 3,
@@ -61,6 +63,7 @@ const PopularProducts = () => {
       rating: 3,
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+      farm: "Vickys farm",
     },
     {
       id: 4,
@@ -70,6 +73,7 @@ const PopularProducts = () => {
       rating: 4,
       image:
         "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+      farm: "Vickys farm",
     },
   ];
 
@@ -78,9 +82,6 @@ const PopularProducts = () => {
       <Carousel
         responsive={responsive}
         ssr={true}
-        // autoPlay
-        // autoPlaySpeed={3000}
-        // infinite
         customLeftArrow={<CustomLeftArrow />}
         customRightArrow={<CustomRightArrow />}
         swipeable
