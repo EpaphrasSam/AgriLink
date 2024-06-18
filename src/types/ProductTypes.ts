@@ -6,6 +6,7 @@ export type Product = {
   rating: number;
   image: string;
   farm: string;
+
   
 };
 
