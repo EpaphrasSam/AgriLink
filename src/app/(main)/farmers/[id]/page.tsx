@@ -4,6 +4,7 @@ import img from "../../../../../public/logo.png";
 import Image from "next/image";
 import { Product } from "@/types/ProductTypes";
 import { Bio } from "@/types/BioTypes";
+import CardItems from "@/components/global/CardItems";
 
 const bios: Bio[] = [
   { id: 1, bio: "we  have made it in life" },
@@ -57,7 +58,7 @@ const products: Product[] = [
 
 function Header() {
   return (
-    <div className="flex flex-start bg-white p-4 w-full max-w-4xl">
+    <div className="flex flex-start bg-white p-4 w-full max-w-4xl mb-7">
       <Image src={img} alt="Farm Logo" className="h-16 w-16 rounded-full" />{" "}
       {/* Update the src path */}
       <div className="ml-4">
@@ -93,6 +94,15 @@ function About() {
 }
 
 function Products() {
+  return (
+    <div className="w-full py-4 flex">
+      {products.map((product) => (
+        <CardItems key={product.id} product={product} showFarmer={false} />
+      ))}
+    </div>
+  );
+}
+function Items() {
   return (
     <div className="mt-4 p-4 bg-white">
       <h1 className="text-2xl font-bold mb-4">Products</h1>
@@ -144,37 +154,37 @@ export default function FarmersPage() {
   return (
     <div className="w-full flex flex-col items-center justify-center bg-white">
       <Header />
-      <div className="flex justify-center space-x-4 bg-white pt-2">
+      <div className="flex justify-between w-6/12  bg-white pt-2 mb-4">
         <div
-          className={`text-gray-600 hover:text-green-500 cursor-pointer px-4 pb-2 font-medium text-lg ${
+          className={`flex-grow text-gray-600 hover:text-green-500 cursor-pointer px-4 pb-2 font-medium text-lg ${
             activeTab === "about"
-              ? "text-green-500 border-green-500"
+              ? "text-green-500  border-green-500 border-b-3 "
               : "border-transparent"
           }`}
           onClick={() => handleTabClick("about")}
-          style={{ borderBottomWidth: 4 }}
+          // style={{ borderBottomWidth: 4 }}
         >
           About
         </div>
         <div
-          className={`text-gray-600 hover:text-green-500 cursor-pointer px-4 pb-2 font-medium text-lg ${
+          className={`flex-grow text-gray-600 hover:text-green-500 cursor-pointer px-4 pb-2 font-medium text-lg ${
             activeTab === "products"
-              ? "text-green-500 border-green-500"
+              ? "text-green-500 border-green-500 border-b-3"
               : "border-transparent"
           }`}
           onClick={() => handleTabClick("products")}
-          style={{ borderBottomWidth: 4 }}
+          // style={{ borderBottomWidth: 4 }}
         >
           Products
         </div>
         <div
-          className={`text-gray-600 hover:text-green-500 cursor-pointer px-4 pb-2 font-medium text-lg ${
+          className={` flex-grow text-gray-600 hover:text-green-500 cursor-pointer px-4 pb-2 font-medium text-lg ${
             activeTab === "forums"
-              ? "text-green-500 border-green-500"
+              ? "text-green-500 border-green-500 border-b-3"
               : "border-transparent"
           }`}
           onClick={() => handleTabClick("forums")}
-          style={{ borderBottomWidth: 4 }}
+          // style={{ borderBottomWidth: 4 }}
         >
           Forums
         </div>

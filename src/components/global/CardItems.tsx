@@ -6,9 +6,10 @@ import { PiFarmLight } from "react-icons/pi";
 
 interface CardItemsProps {
   product: Product;
+  showFarmer?: boolean;
 }
 
-const CardItems = ({ product }: CardItemsProps) => {
+const CardItems = ({ product, showFarmer = true }: CardItemsProps) => {
   return (
     <>
       <div
@@ -28,10 +29,12 @@ const CardItems = ({ product }: CardItemsProps) => {
           <div>
             <p className="font-bold text-xl ">{product.title}</p>
           </div>
-          <div className="flex items-center space-x-1">
-            <PiFarmLight className="text-yellow-400 text-md" />
-            <span className="text-gray-700 text-base">{product.farm}</span>
-          </div>
+          {showFarmer && (
+            <div className="flex items-center space-x-1">
+              <PiFarmLight className="text-yellow-400 text-md" />
+              <span className="text-gray-700 text-base">{product.farm}</span>
+            </div>
+          )}
 
           <div className="flex items-center space-x-1">
             <MdStarRate className="text-yellow-400 text-md" />
