@@ -2,6 +2,7 @@ import { Product } from "@/types/ProductTypes";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import React from "react";
 import { MdStarRate } from "react-icons/md";
+import { FcMoneyTransfer } from "react-icons/fc";
 import { PiFarmLight } from "react-icons/pi";
 
 interface CardItemsProps {
@@ -28,6 +29,11 @@ const CardItems = ({ product, showFarmer = true }: CardItemsProps) => {
         <div className="px-2 py-4">
           <div>
             <p className="font-bold text-xl ">{product.title}</p>
+          </div>
+          <div>
+            <span className="text-md font-semibold text-gray-600">
+              GHS {product.price}
+            </span>
           </div>
           {showFarmer && (
             <div className="flex items-center space-x-1">
