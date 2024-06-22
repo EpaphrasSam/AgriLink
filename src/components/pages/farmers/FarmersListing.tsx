@@ -13,7 +13,6 @@ import {
 import React, { useState, useMemo } from "react";
 import { CiLocationOn, CiSearch, CiUser } from "react-icons/ci";
 import { MdStarRate } from "react-icons/md";
-import NextImage from "next/image";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { IoChevronDown } from "react-icons/io5";
 import Link from "next/link";
@@ -226,18 +225,20 @@ const FarmersListing = () => {
                       radius="sm"
                       src={farmer.image}
                       alt={farmer.name}
-                      width={150}
-                      height={150}
-                      as={NextImage}
+                      className="w-28 h-28 object-cover object-center"
                     />
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center gap-2">
                         <CiUser size={20} />
                         <p className="text-lg font-semibold">{farmer.name}</p>
                       </div>
-                      <div className="flex items-start gap-2 break-all">
-                        <IoIosInformationCircleOutline size={20} color="blue" />
-                        <p className="text-sm text-gray-500">{farmer.bio}</p>
+                      <div className="flex items-start gap-2">
+                        <IoIosInformationCircleOutline
+                          className="flex-shrink-0"
+                          size={20}
+                          color="blue"
+                        />
+                        <p className="text-sm  text-gray-500">{farmer.bio}</p>
                       </div>
                       <p className="flex items-start gap-2">
                         <CiLocationOn size={20} color="red" />

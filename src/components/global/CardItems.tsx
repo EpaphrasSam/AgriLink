@@ -2,7 +2,6 @@ import { Product } from "@/types/ProductTypes";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import React from "react";
 import { MdStarRate } from "react-icons/md";
-import { FcMoneyTransfer } from "react-icons/fc";
 import { PiFarmLight } from "react-icons/pi";
 
 interface CardItemsProps {

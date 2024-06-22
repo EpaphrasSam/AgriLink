@@ -44,6 +44,10 @@ const NavBar = () => {
       transition: { type: "tween", duration: 0.3 },
     },
   };
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
   return (
     <Navbar
       maxWidth="full"
@@ -127,12 +131,22 @@ const NavBar = () => {
           )}
         </NavbarItem>
       </NavbarContent>
-      <NavbarMenu>
-        {NavbarLinks.map((links) => (
-          <NavbarItem key={links.label}>
-            <Link href={links.href}>{links.label}</Link>
-          </NavbarItem>
-        ))}
+      <NavbarMenu className="bg-white">
+        {NavbarLinks.map((links) => {
+          const isActive = pathname === links.href;
+          return (
+            <NavbarItem key={links.label} className="py-3">
+              <Link
+                className={`${
+                  isActive ? "underline" : "hover:underline hover:opacity-75"
+                } underline-offset-8`}
+                href={links.href}
+              >
+                {links.label}
+              </Link>
+            </NavbarItem>
+          );
+        })}
       </NavbarMenu>
     </Navbar>
   );
