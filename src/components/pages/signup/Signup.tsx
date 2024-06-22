@@ -28,16 +28,21 @@ export type FormData = {
   confirmPassword: string;
 };
 
-export const UserSchema: ZodType<FormData> = z.object({
-  email: z.string().email(),
+export const UserSchema: ZodType<FormData> = z
+  .object({
+    email: z.string().email(),
 
-  username: z.string().min(3, { message: "Username is too short" }).max(20),
-  password: z
-    .string()
-    .min(8, { message: "Password is too short" })
-    .max(20, { message: "Password is too long" }),
-  confirmPassword: z.string(),
-});
+    username: z.string().min(3, { message: "Username is too short" }).max(20),
+    password: z
+      .string()
+      .min(8, { message: "Password is too short" })
+      .max(20, { message: "Password is too long" }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"], // path of error
+  });
 
 export default function Signup() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -104,12 +109,34 @@ export default function Signup() {
             />
           </div>
           <div>
+            <label className="block text-gray-700">Email</label>
+            <Input
+              type="text"
+              placeholder="Enter your email"
+              // className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              {...register("email")}
+              isInvalid={!!errors.email}
+              errorMessage={errors.email?.message}
+            />
+          </div>
+          <div>
             <label className="block text-gray-700">Password</label>
             <Input
               type="password"
               placeholder="Enter your password"
               {...register("password")}
+              isInvalid={!!errors.password}
               errorMessage={errors.password?.message}
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Password</label>
+            <Input
+              type="password"
+              placeholder="Confirm your password"
+              {...register("password")}
+              isInvalid={!!errors.confirmPassword}
+              errorMessage={errors.confirmPassword?.message}
             />
           </div>
           <div className="flex gap-4">
