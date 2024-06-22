@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react";
 import ProductFilters from "./ProductFilters";
 import ProductGrid from "./ProductGrid";
+import { Product } from "@/types/ProductTypes";
 
-const products = [
+const products: Product[] = [
   {
     id: 1,
     title: "Strawberries",
@@ -13,6 +14,7 @@ const products = [
     rating: 4,
     image:
       "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+    farm: "Vickys farm",
   },
   {
     id: 2,
@@ -22,6 +24,7 @@ const products = [
     rating: 5,
     image:
       "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+    farm: "Vickys farm",
   },
   {
     id: 3,
@@ -31,6 +34,7 @@ const products = [
     rating: 3,
     image:
       "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+    farm: "Vickys farm",
   },
   {
     id: 4,
@@ -40,6 +44,7 @@ const products = [
     rating: 4,
     image:
       "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+    farm: "Vickys farm",
   },
 ];
 

@@ -1,29 +1,52 @@
+import { Product } from "@/types/ProductTypes";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import React from "react";
+import { MdStarRate } from "react-icons/md";
+import { FcMoneyTransfer } from "react-icons/fc";
+import { PiFarmLight } from "react-icons/pi";
 
 interface CardItemsProps {
-  item: any;
+  product: Product;
+  showFarmer?: boolean;
 }
 
-const CardItems = ({ item }: CardItemsProps) => {
+const CardItems = ({ product, showFarmer = true }: CardItemsProps) => {
   return (
     <>
-      <div key={item.id} className="flex justify-center m-2">
-        <Card className="w-[250px] h-[300px]" isPressable>
-          <CardBody className="p-0 overflow-visible">
-            <Image
-              shadow="sm"
-              width="100%"
-              src={item.image}
-              alt={item.title}
-              className="w-full h-full object-contain"
-            />
-          </CardBody>
-          <CardFooter className="mt-2 text-center flex flex-col gap-2">
-            <h2 className="text-xl font-bold">{item.title}</h2>
-            <p className="text-gray-600">{item.description}</p>
-          </CardFooter>
-        </Card>
+      <div
+        key={product.id}
+        className="flex flex-col justify-center m-2 cursor-pointer "
+      >
+        <div className="max-w-[250px] rounded-lg overflow-hidden shadow-sm bg-white ">
+          <Image
+            src={product.image}
+            alt="Sunrise Orchard"
+            width="100%"
+            height={300} // Fixed height for consistent design
+            className="w-full object-cover"
+          />
+        </div>
+        <div className="px-2 py-4">
+          <div>
+            <p className="font-bold text-xl ">{product.title}</p>
+          </div>
+          <div>
+            <span className="text-md font-semibold text-gray-600">
+              GHS {product.price}
+            </span>
+          </div>
+          {showFarmer && (
+            <div className="flex items-center space-x-1">
+              <PiFarmLight className="text-yellow-400 text-md" />
+              <span className="text-gray-700 text-base">{product.farm}</span>
+            </div>
+          )}
+
+          <div className="flex items-center space-x-1">
+            <MdStarRate className="text-yellow-400 text-md" />
+            <span className="text-md font-semibold text-yellow-600">4.5</span>
+          </div>
+        </div>
       </div>
     </>
   );

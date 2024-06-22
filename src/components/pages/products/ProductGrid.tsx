@@ -19,7 +19,7 @@ const ProductGrid = ({ products }: any) => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {categorizedProducts[category].map((product: any) => (
-              <CardItems key={product.id} item={product} />
+              <CardItems key={product.id} product={product} />
             ))}
           </div>
         </div>
