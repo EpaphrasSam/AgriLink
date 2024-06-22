@@ -1,12 +1,12 @@
+"use client";
 import ProductCard from "@/components/global/ProductCard";
 import { Product } from "@/types/ProductTypes";
-import React from "react";
 
-interface ProductGridProps {
+interface ProductsProps {
   products: Product[];
 }
 
-const ProductGrid = ({ products }: ProductGridProps) => {
+const FarmersProducts = ({ products }: ProductsProps) => {
   const categorizedProducts = products.reduce((acc: any, product: any) => {
     if (!acc[product.category]) {
       acc[product.category] = [];
@@ -14,9 +14,8 @@ const ProductGrid = ({ products }: ProductGridProps) => {
     acc[product.category].push(product);
     return acc;
   }, {});
-
   return (
-    <div className="w-full p-4">
+    <div className="w-full py-4 flex flex-wrap">
       {Object.keys(categorizedProducts).map((category) => (
         <div key={category} className="mb-8">
           <h2 className="text-2xl font-bold sticky top-0 bg-white pb-2 z-20">
@@ -33,4 +32,4 @@ const ProductGrid = ({ products }: ProductGridProps) => {
   );
 };
 
-export default ProductGrid;
+export default FarmersProducts;

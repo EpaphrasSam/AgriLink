@@ -7,8 +7,8 @@ import {
   CustomRightArrow,
 } from "@/components/global/CustomArrows";
 import Carousel from "react-multi-carousel";
-import CardItems from "@/components/global/CardItems";
 import { Product } from "@/types/ProductTypes";
+import ProductCard from "@/components/global/ProductCard";
 
 const responsive = {
   LargeDesktop: {
@@ -87,7 +87,7 @@ const PopularProducts = () => {
         swipeable
       >
         {products.map((product) => (
-          <CardItems key={product.id} product={product} />
+          <ProductCard key={product.id} product={product} />
         ))}
       </Carousel>
     </div>
