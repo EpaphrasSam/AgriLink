@@ -19,6 +19,8 @@
     "@prisma/client": "^5.15.0",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
     "framer-motion": "^11.1.7",
     "next": "14.2.4",
     "next-auth": "^5.0.0-beta.18",
