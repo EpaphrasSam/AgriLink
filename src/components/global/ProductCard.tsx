@@ -1,3 +1,4 @@
+import useCartStore from "@/store/useCartStore";
 import { Product } from "@/types/ProductTypes";
 import { Image } from "@nextui-org/react";
 import Link from "next/link";
@@ -11,6 +12,7 @@ interface CardItemsProps {
 }
 
 const ProductCard = ({ product, showFarmer = true }: CardItemsProps) => {
+  const addToCart = useCartStore((state) => state.addToCart);
   return (
     <>
       <div
@@ -52,7 +54,10 @@ const ProductCard = ({ product, showFarmer = true }: CardItemsProps) => {
             >
               View Product
             </Link>
-            <p className="underline underline-offset-4 hover:opacity-75 cursor-pointer">
+            <p
+              className="underline underline-offset-4 hover:opacity-75 cursor-pointer"
+              onClick={() => addToCart(product)}
+            >
               Add to Cart
             </p>
           </div>

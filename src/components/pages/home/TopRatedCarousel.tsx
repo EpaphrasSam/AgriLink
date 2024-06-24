@@ -8,6 +8,7 @@ import {
 } from "@/components/global/CustomArrows";
 import Carousel from "react-multi-carousel";
 import { MdStarRate } from "react-icons/md";
+import Link from "next/link";
 
 const responsive = {
   LargeDesktop: {
@@ -94,21 +95,21 @@ const TopRatedCarousel = () => {
         swipeable
       >
         {items.map((item) => (
-          <div
+          <Link
+            href={`/farmers/${item.id}`}
             key={item.id}
-            className="flex flex-col justify-center m-2 cursor-pointer "
-            onClick={handleClick}
+            className="flex flex-col justify-center m-2"
           >
             <div className="max-w-md rounded-lg overflow-hidden shadow-sm bg-white ">
               <Image
                 src={item.image}
                 alt="Sunrise Orchard"
                 width="100%"
-                height={300} // Fixed height for consistent design
+                height={300}
                 className="w-full object-cover"
               />
             </div>
-            <div className="px-6 py-4">
+            <div className="px-2 py-4">
               <p className="font-bold text-xl ">{item.title}</p>
               <p className="text-gray-700 text-base">
                 {item.town}, {item.region}
@@ -120,7 +121,7 @@ const TopRatedCarousel = () => {
                 </span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </Carousel>
     </div>

@@ -8,6 +8,8 @@ import {
   NavbarItem,
   NavbarMenu,
   NavbarMenuToggle,
+  Badge,
+  Avatar,
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,11 +17,11 @@ import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
 import { IoCartOutline, IoSearchOutline } from "react-icons/io5";
-import { CiShoppingCart } from "react-icons/ci";
 import { NavbarLinks } from "@/lib/routes";
 import { motion, useScroll } from "framer-motion";
-import { Badge, Avatar } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
+import { useStore } from "@/store/useStore";
+import useCartStore from "@/store/useCartStore";
 
 const NavBar = () => {
   const pathname = usePathname();
@@ -27,6 +29,9 @@ const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
   const isLoggedIn = true;
+  const totalItems = useStore(useCartStore, (state) =>
+    state.calculateTotalItems()
+  );
 
   useEffect(() => {
     return scrollY.on("change", (y) => {
@@ -66,7 +71,6 @@ const NavBar = () => {
         aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         className="md:hidden"
       />
-      {/* <NavbarContent justify="start" className="md:hidden" /> */}
       <NavbarBrand>
         <Link href="/">
           <motion.div
@@ -112,10 +116,18 @@ const NavBar = () => {
             className="transition-transform duration-300 cursor-pointer hover:scale-105"
           />
 
-          <IoCartOutline
-            size={28}
-            className="transition-transform duration-300 cursor-pointer hover:scale-105"
-          />
+          <Link href="/cart">
+            <Badge
+              isInvisible={totalItems === 0}
+              content={totalItems}
+              color="primary"
+            >
+              <IoCartOutline
+                size={28}
+                className="transition-transform duration-300 hover:scale-105"
+              />
+            </Badge>
+          </Link>
           {!isLoggedIn ? (
             <Avatar
               size="sm"
