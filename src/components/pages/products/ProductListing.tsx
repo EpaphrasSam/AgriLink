@@ -69,6 +69,7 @@ const ProductListing = () => {
     categories: uniqueCategories,
     priceRange: [minPrice, maxPrice],
     ratings: [5],
+    searchQuery: "",
   });
 
   const [filteredProducts, setFilteredProducts] = useState(products);
@@ -83,8 +84,11 @@ const ProductListing = () => {
         product.price <= filters.priceRange[1];
       const matchesRating =
         filters.ratings.length === 0 || product.rating <= filters.ratings[0];
+      const matchesSearch =
+        filters.searchQuery === "" ||
+        product.title.toLowerCase().includes(filters.searchQuery.toLowerCase());
 
-      return matchesCategory && matchesPrice && matchesRating;
+      return matchesCategory && matchesPrice && matchesRating && matchesSearch;
     });
 
     setFilteredProducts(filtered);

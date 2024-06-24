@@ -26,6 +26,7 @@ const ProductCard = ({ product, showFarmer = true }: CardItemsProps) => {
             width="100%"
             height={300}
             className="w-full object-cover"
+            isZoomed
           />
         </div>
         <div className="px-2 py-4">

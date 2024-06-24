@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { Button, Divider, Slider } from "@nextui-org/react";
+import { Button, Divider, Slider, Input } from "@nextui-org/react";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 
 const ProductFilters = ({
   filters,
@@ -34,11 +35,34 @@ const ProductFilters = ({
     }));
   };
 
+  const handleSearchChange = (event: any) => {
+    setFilters((prev: any) => ({
+      ...prev,
+      searchQuery: event.target.value,
+    }));
+  };
+
   return (
     <div className="w-full p-4">
       <h2 className="text-2xl font-bold">Filters</h2>
       <Divider className="my-4" />
+
       <div className="flex md:flex-col flex-row max-md:overflow-x-auto gap-8">
+        <div className="mb-4 max-md:min-w-[200px]">
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Search</h3>
+            <Input
+              radius="full"
+              isClearable
+              variant="bordered"
+              placeholder="Search for products"
+              onClear={() => setFilters({ ...filters, searchQuery: "" })}
+              value={filters.searchQuery}
+              onChange={handleSearchChange}
+              startContent={<IoIosSearch color="gray" size={24} />}
+            />
+          </div>
+        </div>
         <div className="mb-4 max-md:min-w-[200px]">
           <div>
             <h3 className="text-lg font-semibold mb-2">Categories</h3>
