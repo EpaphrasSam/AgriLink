@@ -93,7 +93,7 @@ const Cart = () => {
                           {product.title}
                         </h3>
                         <p className="text-gray-600">
-                          GHS {product.price * product.quantity}
+                          GHS {(product.price * product.quantity).toFixed(2)}
                         </p>
                         <div className="flex justify-center border border-gray-200 p-2 rounded-full items-center mt-2 space-x-2">
                           <MdRemoveCircle

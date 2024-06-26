@@ -75,15 +75,16 @@ const useCartStore = create<CartState>()(
       clearCart: () => set({ cart: {} }),
       calculateSubtotal: (farm: string) => {
         const farmProducts = get().cart[farm] || [];
-        return farmProducts.reduce(
+        const subtotal = farmProducts.reduce(
           (total, product) => total + product.price * product.quantity,
           0
         );
+        return parseFloat(subtotal.toFixed(2));
       },
 
       calculateTotal: () => {
         const cart = get().cart;
-        return Object.values(cart).reduce(
+        const total = Object.values(cart).reduce(
           (total, products) =>
             total +
             products.reduce(
@@ -93,6 +94,7 @@ const useCartStore = create<CartState>()(
             ),
           0
         );
+        return parseFloat(total.toFixed(2));
       },
       calculateTotalItems: () => {
         const cart = get().cart;
