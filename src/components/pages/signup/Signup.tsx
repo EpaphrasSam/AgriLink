@@ -47,7 +47,7 @@ export default function Signup() {
   const [selectedRegion, setSelectedRegion] = useState(
     new Set(["Select Region"])
   );
-
+  const [signupType, setSignupType] = useState("");
   const {
     register,
     handleSubmit,
@@ -63,13 +63,24 @@ export default function Signup() {
     // Check for errors
     if (Object.keys(errors).length === 0) {
       console.log("SUCCESS", data);
-      // Open the modal if no errors
-      onOpen();
+      // Open the modal if signing up as farmer
+      if (signupType === "farmer") {
+        onOpen();
+      } else {
+        // Handle customer signup success
+        console.log("Customer signup successful");
+      }
     }
   };
+
   const handleFarmerSignup = () => {
+    setSignupType("farmer");
     handleSubmit(onSubmit)();
   };
+  const handleCustomerSignup = () => {
+    setSignupType("customer");
+  };
+
   const regions = [
     "Greater Accra Region",
     "Ashanti Region",
@@ -155,6 +166,7 @@ export default function Signup() {
             <Button
               type="submit"
               className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-md hover:bg-indigo-700 focus:bg-indigo-700 focus:outline-none"
+              onPress={handleCustomerSignup}
             >
               Signup as Customer
             </Button>
@@ -183,7 +195,7 @@ export default function Signup() {
             </div>
             <div>
               <label className="block text-gray-700">About</label>
-              <Input type="text" placeholder="Enter abbout your farm" />
+              <Input type="text" placeholder="Enter about your farm" />
             </div>
             <div>
               <Select label="Select a Region" className="max-w-xs">
