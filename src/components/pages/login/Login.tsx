@@ -43,8 +43,8 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-6">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-white-100 p-6">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-2xl">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
@@ -68,6 +68,12 @@ export default function Login() {
               isInvalid={!!errors.password}
               errorMessage={errors.password?.message}
             />
+            <a
+              href="#"
+              className="text-indigo-600 hover:text-indigo-800 text-xs"
+            >
+              Forgot your password?
+            </a>
           </div>
           <div>
             <Button
@@ -78,8 +84,11 @@ export default function Login() {
             </Button>
           </div>
           <div className="text-center">
-            <a href="#" className="text-indigo-600 hover:text-indigo-800">
-              Forgot your password?
+            <a
+              href="/signup"
+              className="text-indigo-600 hover:text-indigo-800 "
+            >
+              Don't an account? Signup
             </a>
           </div>
         </form>
