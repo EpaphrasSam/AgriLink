@@ -30,7 +30,6 @@ export type FormData = {
 export const UserSchema: ZodType<FormData> = z
   .object({
     email: z.string().email(),
-
     username: z.string().min(3, { message: "Username is too short" }).max(20),
     password: z
       .string()
@@ -136,11 +135,11 @@ export default function Signup() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Password</label>
+            <label className="block text-gray-700">Confirm Password</label>
             <Input
               type="password"
               placeholder="Confirm your password"
-              {...register("password")}
+              {...register("confirmPassword")}
               isInvalid={!!errors.confirmPassword}
               errorMessage={errors.confirmPassword?.message}
             />
@@ -184,7 +183,7 @@ export default function Signup() {
             </div>
             <div>
               <label className="block text-gray-700">About</label>
-              <Input type="text" placeholder="Enter your town" />
+              <Input type="text" placeholder="Enter abbout your farm" />
             </div>
             <div>
               <Select label="Select a Region" className="max-w-xs">
