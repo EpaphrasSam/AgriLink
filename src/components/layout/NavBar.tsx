@@ -17,11 +17,11 @@ import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
 import { IoCartOutline, IoSearchOutline } from "react-icons/io5";
-import { NavbarLinks } from "@/lib/routes";
 import { motion, useScroll } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/useCartStore";
+import { NavbarLinks } from "@/lib/routes";
 
 const NavBar = () => {
   const pathname = usePathname();
