@@ -23,7 +23,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 export type FormData = {
   email: string;
   username: string;
-
   password: string;
   confirmPassword: string;
 };
@@ -62,9 +61,16 @@ export default function Signup() {
   console.log(errors);
 
   const onSubmit = async (data: FormData) => {
-    console.log("SUCCESS", data);
+    // Check for errors
+    if (Object.keys(errors).length === 0) {
+      console.log("SUCCESS", data);
+      // Open the modal if no errors
+      onOpen();
+    }
   };
-
+  const handleFarmerSignup = () => {
+    handleSubmit(onSubmit)();
+  };
   const regions = [
     "Greater Accra Region",
     "Ashanti Region",
@@ -141,9 +147,9 @@ export default function Signup() {
           </div>
           <div className="flex gap-4">
             <Button
-              type="submit"
+              type="button"
               className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-md hover:bg-indigo-700 focus:bg-indigo-700 focus:outline-none"
-              onPress={onOpen}
+              onPress={handleFarmerSignup}
             >
               Signup as Farmer
             </Button>
@@ -155,8 +161,8 @@ export default function Signup() {
             </Button>
           </div>
           <div className="text-center">
-            <a href="#" className="text-indigo-600 hover:text-indigo-800">
-              Forgot your password?
+            <a href="/login" className="text-indigo-600 hover:text-indigo-800">
+              Already have an account? Login
             </a>
           </div>
         </form>
@@ -170,6 +176,14 @@ export default function Signup() {
           <ModalBody>
             <div>
               <label className="block text-gray-700">Town</label>
+              <Input type="text" placeholder="Enter your town" />
+            </div>
+            <div>
+              <label className="block text-gray-700"> Biography</label>
+              <Input type="text" placeholder="Enter your Biography" />
+            </div>
+            <div>
+              <label className="block text-gray-700">About</label>
               <Input type="text" placeholder="Enter your town" />
             </div>
             <div>
