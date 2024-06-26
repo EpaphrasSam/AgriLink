@@ -29,7 +29,7 @@ const FarmerHeader = () => {
     <Navbar
       maxWidth="full"
       isBordered
-      position="static"
+      position="sticky"
       hidden
       classNames={{
         wrapper: "max-sm:px-2",
@@ -56,11 +56,16 @@ const FarmerHeader = () => {
         justify="center"
         className="text-lg font-bold text-gray-600"
       >
-        Farmer Dashboard
+        Farmer Portal
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <Button size="sm" color="danger" startContent={<FaSignOutAlt />}>
+          <Button
+            size="sm"
+            color="danger"
+            className="text-sm "
+            startContent={<FaSignOutAlt />}
+          >
             Logout
           </Button>
         </NavbarItem>
