@@ -19,6 +19,8 @@ import { useState } from "react";
 import { passwordValidator } from "@/helpers/bcryptValidator";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 export type FormData = {
   email: string;
@@ -42,7 +44,10 @@ export const UserSchema: ZodType<FormData> = z
     path: ["confirmPassword"], // path of error
   });
 
-export default function Signup() {
+const Signup = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedRegion, setSelectedRegion] = useState(
     new Set(["Select Region"])
@@ -112,47 +117,79 @@ export default function Signup() {
     <div className="flex min-h-screen items-center justify-center bg-white-100 p-6">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-2xl">
         <h2 className="text-2xl font-bold mb-6 text-center">Signup</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div>
-            <label className="block text-gray-700">Username</label>
             <Input
               type="text"
               placeholder="Enter your username"
-              // className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              label="Username"
+              radius="sm"
+              labelPlacement="outside"
               {...register("username")}
               isInvalid={!!errors.username}
               errorMessage={errors.username?.message}
             />
           </div>
           <div>
-            <label className="block text-gray-700">Email</label>
             <Input
               type="text"
               placeholder="Enter your email"
-              // className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              label="Email"
+              radius="sm"
+              labelPlacement="outside"
               {...register("email")}
               isInvalid={!!errors.email}
               errorMessage={errors.email?.message}
             />
           </div>
           <div>
-            <label className="block text-gray-700">Password</label>
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
+              label="Password"
+              radius="sm"
+              labelPlacement="outside"
               {...register("password")}
               isInvalid={!!errors.password}
               errorMessage={errors.password?.message}
+              endContent={
+                showPassword ? (
+                  <FaRegEyeSlash
+                    className="cursor-pointer hover:opacity-75"
+                    onClick={() => setShowPassword(false)}
+                  />
+                ) : (
+                  <FaRegEye
+                    className="cursor-pointer hover:opacity-75"
+                    onClick={() => setShowPassword(true)}
+                  />
+                )
+              }
             />
           </div>
           <div>
-            <label className="block text-gray-700">Confirm Password</label>
             <Input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm your password"
+              label="Confirm Password"
+              radius="sm"
+              labelPlacement="outside"
               {...register("confirmPassword")}
               isInvalid={!!errors.confirmPassword}
               errorMessage={errors.confirmPassword?.message}
+              endContent={
+                showConfirmPassword ? (
+                  <FaRegEyeSlash
+                    className="cursor-pointer hover:opacity-75"
+                    onClick={() => setShowConfirmPassword(false)}
+                  />
+                ) : (
+                  <FaRegEye
+                    className="cursor-pointer hover:opacity-75"
+                    onClick={() => setShowConfirmPassword(true)}
+                  />
+                )
+              }
             />
           </div>
           <div className="flex gap-4">
@@ -171,10 +208,15 @@ export default function Signup() {
               Signup as Customer
             </Button>
           </div>
-          <div className="text-center">
-            <a href="/login" className="text-indigo-600 hover:text-indigo-800">
-              Already have an account? Login
-            </a>
+
+          <div className="flex gap-1 justify-center">
+            Already have an account?
+            <Link
+              href="/login"
+              className="text-indigo-600 hover:text-indigo-800 hover:underline underline-offset-4"
+            >
+              Login
+            </Link>
           </div>
         </form>
       </div>
@@ -184,29 +226,49 @@ export default function Signup() {
           <ModalHeader className="flex flex-col gap-1">
             Farmer Additional Information
           </ModalHeader>
-          <ModalBody>
+          <ModalBody className="flex flex-col gap-4">
             <div>
-              <label className="block text-gray-700">Town</label>
-              <Input type="text" placeholder="Enter your town" />
+              <Input
+                type="text"
+                placeholder="Enter your town"
+                label="Town"
+                radius="sm"
+                labelPlacement="outside"
+              />
             </div>
             <div>
-              <label className="block text-gray-700"> Biography</label>
-              <Input type="text" placeholder="Enter your Biography" />
+              <Input
+                type="text"
+                placeholder="Enter your Biography"
+                label="Biography"
+                radius="sm"
+                labelPlacement="outside"
+              />
             </div>
             <div>
-              <label className="block text-gray-700">About</label>
-              <Input type="text" placeholder="Enter about your farm" />
+              <Input
+                type="text"
+                placeholder="Enter about your farm"
+                label="About"
+                radius="sm"
+                labelPlacement="outside"
+              />
             </div>
             <div>
-              <Select label="Select a Region" className="max-w-xs">
+              <Select radius="sm" label="Select a Region" className="max-w-xs">
                 {regions.map((region) => (
                   <SelectItem key={region}>{region}</SelectItem>
                 ))}
               </Select>
             </div>
             <div>
-              <label className="block text-gray-700">Image</label>
-              <Input type="file" accept="image/*" />
+              <Input
+                type="file"
+                accept="image/*"
+                label="Upload your farm image"
+                radius="sm"
+                labelPlacement="outside"
+              />
             </div>
           </ModalBody>
           <ModalFooter>
@@ -221,4 +283,6 @@ export default function Signup() {
       </Modal>
     </div>
   );
-}
+};
+
+export default Signup;
