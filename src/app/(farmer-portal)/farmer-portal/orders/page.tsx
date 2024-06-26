@@ -1,13 +1,5 @@
-import StatisticsCards from "@/components/pages/farmer-portal/dashboard/StatisticsCards";
 import OrdersTable from "@/components/pages/farmer-portal/orders/OrdersTable";
 import { Divider } from "@nextui-org/react";
-
-const stats = {
-  totalSales: 500,
-  orders: 123,
-  products: 45,
-  ratings: 4.5,
-};
 
 const orders: any[] = [
   {
@@ -252,15 +244,17 @@ const orders: any[] = [
   },
 ];
 
-export default function FarmerDashboard() {
+export default async function OrdersPage() {
   return (
     <div className="sm:p-6 p-3">
-      <p className="text-2xl font-bold">Dashboard</p>
-      <Divider className="my-4" />
-      <StatisticsCards stats={stats!} />
-      <div className="mt-8">
-        <OrdersTable orders={orders} isRecentOnly={true} />
+      <div className="flex items-center gap-2 text-2xl font-bold">
+        Orders
+        <span className="text-xs font-semibold mt-2 text-zinc-600">
+          {orders.length} Orders found
+        </span>
       </div>
+      <Divider className="my-4" />
+      <OrdersTable orders={orders} isRecentOnly={false} />
     </div>
   );
 }
