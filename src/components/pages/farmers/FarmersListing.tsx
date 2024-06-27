@@ -100,8 +100,6 @@ const FarmersListing = () => {
       filtered = filtered.filter((farmer) => regions.includes(farmer.region));
     }
 
-    console.log(rating);
-
     if (rating) {
       filtered = filtered.filter(
         (farmer) => farmer.rating >= parseFloat(rating)

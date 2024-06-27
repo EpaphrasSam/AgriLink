@@ -29,8 +29,7 @@ const FarmerHeader = () => {
     <Navbar
       maxWidth="full"
       isBordered
-      position="sticky"
-      hidden
+      position="static"
       classNames={{
         wrapper: "max-sm:px-2",
       }}

@@ -25,22 +25,12 @@ const FarmerSideBar = () => {
 
   return (
     <div
-      className={`flex flex-col sticky ${
+      className={`flex flex-col ${
         isExpanded || isMdOrAbove ? "w-64" : "w-20"
-      } max-[768px]:w-full max-[768px]:p-3 p-4  max-[768px]:border-1 max-[768px]:border-gray-200 max-[768px]:rounded-full h-full transition-all duration-300 ease-in-out shadow-lg `}
+      } max-md:w-full max-md:p-3 p-4  max-md:border-1 max-md:border-gray-200 max-md:rounded-full h-full transition-all duration-300 ease-in-out shadow-lg `}
     >
       {!isMobile && (
         <>
-          {/* {!isMdOrAbove && (
-            <div className="absolute top-2 right-2">
-              <button
-                className="text-gray-600 hover:opacity-75 p-2 focus:outline-none"
-                onClick={() => setIsExpanded(!isExpanded)}
-              >
-                {isExpanded ? <FaChevronLeft /> : <FaChevronRight />}
-              </button>
-            </div>
-          )} */}
           <div className="flex flex-col items-center gap-2 pt-6">
             <Avatar size="lg" />
             {isExpanded && (
@@ -63,7 +53,7 @@ const FarmerSideBar = () => {
         {farmerNavigationLinks.map((link, index) => (
           <Link href={link.route} key={index}>
             <div
-              className={`flex items-center text-gray-800 p-3 max-[768px]:mb-0 mb-4 rounded-lg hover:opacity-75 transition-colors duration-200 ${
+              className={`flex items-center text-gray-800 p-3 max-md:mb-0 mb-4 rounded-lg hover:opacity-75 transition-colors duration-200 ${
                 pathname === link.route ? "bg-blue-500 text-white" : ""
               } ${isMobile ? "flex-col" : ""}`}
             >

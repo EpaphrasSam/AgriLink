@@ -222,8 +222,6 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
     return items;
   };
 
-  console.log(orders);
-
   return (
     <>
       <Card className="w-full max-w-screen-md overflow-x-auto">
