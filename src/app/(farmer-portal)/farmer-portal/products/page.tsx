@@ -8,6 +8,10 @@ const products = [
     price: 10,
     rating: 4.5,
     category: "Fruits",
+    description: "A fresh and juicy organic apple.",
+    images: [
+      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+    ],
   },
   {
     id: "2",
@@ -15,6 +19,10 @@ const products = [
     price: 20,
     rating: 3.5,
     category: "Fruits",
+    description: "A sweet and ripe organic banana.",
+    images: [
+      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+    ],
   },
   {
     id: "3",
@@ -22,6 +30,10 @@ const products = [
     price: 30,
     rating: 4.5,
     category: "Onions",
+    description: "A tangy and vitamin-rich organic orange.",
+    images: [
+      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+    ],
   },
   {
     id: "4",
@@ -29,6 +41,10 @@ const products = [
     price: 40,
     rating: 4.5,
     category: "Tomatoes",
+    description: "A juicy and flavorful organic tomato.",
+    images: [
+      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+    ],
   },
   {
     id: "5",
@@ -36,6 +52,10 @@ const products = [
     price: 50,
     rating: 4.5,
     category: "Carrots",
+    description: "A crunchy and nutrient-packed organic carrot.",
+    images: [
+      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
+    ],
   },
 ];
 

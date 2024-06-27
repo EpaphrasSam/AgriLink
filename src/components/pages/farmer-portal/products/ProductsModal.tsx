@@ -1,8 +1,9 @@
 "use client";
 
-import { categories } from "@/lib/constants";
 import {
   Button,
+  Divider,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -13,7 +14,11 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import { categories } from "@/lib/constants";
+import { AiOutlinePlus } from "react-icons/ai";
+import { ImBin2 } from "react-icons/im";
 
 interface ProductsModalProps {
   isOpen: boolean;
@@ -24,7 +29,7 @@ interface ProductsModalProps {
     price: number;
     category: string;
     description: string;
-    image: string;
+    images: string[];
   } | null;
   onSave: (product: {
     id?: string;
@@ -32,7 +37,7 @@ interface ProductsModalProps {
     price: number;
     category: string;
     description: string;
-    image: string;
+    images: string[];
   }) => void;
 }
 
@@ -44,9 +49,9 @@ const ProductsModal = ({
 }: ProductsModalProps) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("Fruits");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     if (product) {
@@ -54,19 +59,39 @@ const ProductsModal = ({
       setPrice(product.price);
       setCategory(product.category);
       setDescription(product.description);
-      setImage(product.image);
+      setImages(product.images || []);
     } else {
       setName("");
       setPrice(0);
       setCategory("Fruits");
       setDescription("");
-      setImage("");
+      setImages([]);
     }
   }, [product]);
 
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const newImages = acceptedFiles.map((file) => URL.createObjectURL(file));
+    setImages((prevImages) => [...prevImages, ...newImages]);
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg"],
+    },
+  });
+
   const handleSave = () => {
-    onSave({ id: product?.id, name, price, category, description, image });
+    onSave({ id: product?.id, name, price, category, description, images });
     onClose();
+  };
+
+  const removeImage = (index: number) => {
+    setImages((prevImages) => {
+      const newImages = [...prevImages];
+      newImages.splice(index, 1);
+      return newImages;
+    });
   };
 
   return (
@@ -74,7 +99,7 @@ const ProductsModal = ({
       backdrop="opaque"
       isOpen={isOpen}
       radius="sm"
-      size="xl"
+      size="3xl"
       onOpenChange={onClose}
       placement="center"
       motionProps={{
@@ -112,7 +137,7 @@ const ProductsModal = ({
           />
           <div className="flex flex-row gap-2">
             <Input
-              label="Price"
+              label="Price (GHS)"
               type="number"
               placeholder="Enter product price"
               value={price.toString()}
@@ -123,10 +148,11 @@ const ProductsModal = ({
               label="Category"
               placeholder="Select category"
               value={category}
-              onChange={(value: any) => setCategory(value)}
+              selectedKeys={[category]}
+              onSelectionChange={(value: any) => setCategory(value.currentKey)}
               fullWidth
             >
-              {categories.map((cat: string) => (
+              {categories.map((cat) => (
                 <SelectItem value={cat} key={cat}>
                   {cat}
                 </SelectItem>
@@ -140,13 +166,37 @@ const ProductsModal = ({
             onChange={(e) => setDescription(e.target.value)}
             fullWidth
           />
-          <Input
-            label="Image URL"
-            placeholder="Enter image URL"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            fullWidth
-          />
+          <Divider className="my-2" />
+          <label htmlFor="images" className="text-lg">
+            Product Images (Add at most 3 images)
+          </label>
+          <div className="flex flex-wrap gap-4 mt-4">
+            {images.map((image, index) => (
+              <div key={index} className="relative flex flex-col items-center">
+                <Image
+                  src={image}
+                  alt={`Product Image ${index + 1}`}
+                  className="w-24 h-24 object-cover rounded-md"
+                />
+                <Button
+                  radius="sm"
+                  color="danger"
+                  variant="light"
+                  isIconOnly
+                  startContent={<ImBin2 />}
+                  className="text-center"
+                  onClick={() => removeImage(index)}
+                />
+              </div>
+            ))}
+            <div
+              {...getRootProps()}
+              className="border-dashed border-2 border-gray-300 p-4 rounded-md cursor-pointer flex items-center justify-center w-24 h-24"
+            >
+              <input {...getInputProps()} />
+              <AiOutlinePlus size={24} />
+            </div>
+          </div>
         </ModalBody>
         <ModalFooter>
           <Button radius="sm" color="danger" onClick={onClose}>

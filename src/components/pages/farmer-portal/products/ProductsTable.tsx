@@ -28,6 +28,8 @@ interface ProductsTableProps {
     price: number;
     rating: number;
     category: string;
+    description: string;
+    images: string[];
   }[];
 }
 
@@ -69,7 +71,6 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
   const isEmpty = filteredProducts.length === 0;
 
   const handleSaveProduct = (product: any) => {
-    // Handle saving the product (add or edit)
     console.log("Saved product:", product);
   };
 
@@ -90,7 +91,7 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
       </div>
       <Card className="w-full my-6 overflow-x-auto">
         <CardHeader>
-          <div className="w-full sm:flex-row flex-col items-center flex justify-between gap-4">
+          <div className="w-full lg:flex-row flex-col items-center flex justify-between gap-4">
             <div className="flex overflow-x-auto space-x-4">
               {["All", ...categories].map((category) => (
                 <button
