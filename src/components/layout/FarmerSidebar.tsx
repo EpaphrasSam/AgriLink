@@ -57,7 +57,7 @@ const FarmerSideBar = () => {
                 pathname === link.route ? "bg-blue-500 text-white" : ""
               } ${isMobile ? "flex-col" : ""}`}
             >
-              <span className="text-2xl">{link.icon}</span>
+              <span className="text-xl">{link.icon}</span>
               {isExpanded && !isMobile && (
                 <span className="ml-4">{link.name}</span>
               )}

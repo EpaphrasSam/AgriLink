@@ -27,6 +27,10 @@ export const farmerNavigationLinks = [
   { name: "Products", icon: <FaBox />, route: "/farmer-portal/products" },
   { name: "Orders", icon: <FaShoppingCart />, route: "/farmer-portal/orders" },
   { name: "Reviews", icon: <FaStar />, route: "/farmer-portal/reviews" },
-  { name: "Forum", icon: <FaComments />, route: "/farmer-portal/forum" },
+  {
+    name: "Interactions",
+    icon: <FaComments />,
+    route: "/farmer-portal/interactions",
+  },
   { name: "Profile", icon: <FaUser />, route: "/farmer-portal/profile" },
 ];

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Input,
   Button,
@@ -20,6 +20,7 @@ import { AiFillStar, AiOutlinePlus } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
 import ProductsModal from "./ProductsModal";
 import { categories } from "@/lib/constants";
+import CustomModal from "@/components/global/CustomModal";
 
 interface ProductsTableProps {
   products: {
@@ -39,6 +40,7 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const filteredProducts = useMemo(() => {
@@ -73,6 +75,16 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
   const handleSaveProduct = (product: any) => {
     console.log("Saved product:", product);
   };
+
+  const handleDeleteProduct = () => {
+    console.log("Deleted product");
+  };
+
+  useEffect(() => {
+    if (!showDeleteModal && !isModalOpen) {
+      setSelectedProduct(null);
+    }
+  }, [showDeleteModal, isModalOpen]);
 
   return (
     <>
@@ -178,7 +190,13 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
                         >
                           Edit
                         </span>
-                        <span className="text-red-500 underline underline-offset-4 cursor-pointer hover:opacity-70 transition ease-in-out duration-300">
+                        <span
+                          className="text-red-500 underline underline-offset-4 cursor-pointer hover:opacity-70 transition ease-in-out duration-300"
+                          onClick={() => {
+                            setSelectedProduct(item);
+                            setShowDeleteModal(true);
+                          }}
+                        >
                           Delete
                         </span>
                       </div>
@@ -196,6 +214,19 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
           onClose={() => setIsModalOpen(false)}
           product={selectedProduct}
           onSave={handleSaveProduct}
+        />
+      )}
+
+      {showDeleteModal && (
+        <CustomModal
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          label="Delete Product"
+          message="Are you sure you want to delete this product?"
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          color="danger"
+          onConfirm={handleDeleteProduct}
         />
       )}
     </>
