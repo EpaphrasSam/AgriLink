@@ -10,21 +10,32 @@ import {
   NavbarMenuToggle,
   Badge,
   Avatar,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Divider,
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
-import { IoCartOutline, IoSearchOutline } from "react-icons/io5";
+import {
+  IoCartOutline,
+  IoChatbubbleOutline,
+  IoLogOutOutline,
+  IoSearchOutline,
+} from "react-icons/io5";
 import { motion, useScroll } from "framer-motion";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/useCartStore";
 import { NavbarLinks } from "@/lib/routes";
 
 const NavBar = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
@@ -111,10 +122,10 @@ const NavBar = () => {
 
       <NavbarContent justify="end">
         <NavbarItem className="flex gap-4 items-center">
-          <IoSearchOutline
+          {/* <IoSearchOutline
             size={24}
             className="transition-transform duration-300 cursor-pointer hover:scale-105"
-          />
+          /> */}
 
           <Link href="/cart">
             <Badge
@@ -128,12 +139,46 @@ const NavBar = () => {
               />
             </Badge>
           </Link>
-          {!isLoggedIn ? (
-            <Avatar
-              size="sm"
-              isBordered
-              className="transition-transform duration-300 cursor-pointer hover:scale-105"
-            />
+          {isLoggedIn ? (
+            <Dropdown placement="bottom-end" showArrow>
+              <DropdownTrigger>
+                <Avatar
+                  size="sm"
+                  isBordered
+                  className="transition-transform duration-300 cursor-pointer hover:scale-105"
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownItem
+                  startContent={<IoChatbubbleOutline size={20} />}
+                  key="Chat"
+                  variant="shadow"
+                  color="primary"
+                  onClick={() => router.push("/chats")}
+                >
+                  My Chats
+                </DropdownItem>
+                <DropdownItem
+                  startContent={<IoCartOutline size={20} />}
+                  showDivider
+                  key="Order"
+                  variant="shadow"
+                  color="primary"
+                  onClick={() => router.push("/my-orders")}
+                >
+                  My Orders
+                </DropdownItem>
+                <DropdownItem
+                  variant="shadow"
+                  startContent={<IoLogOutOutline size={20} />}
+                  key="logout"
+                  color="danger"
+                  className="text-danger"
+                >
+                  Log Out
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           ) : (
             <Button variant="shadow" color="primary" radius="sm" size="sm">
               <Link href="/login" className="text-base">

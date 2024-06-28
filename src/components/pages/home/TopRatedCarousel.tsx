@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { Image } from "@nextui-org/react";
 import {
   CustomLeftArrow,
   CustomRightArrow,
@@ -98,7 +98,7 @@ const TopRatedCarousel = () => {
           <Link
             href={`/farmers/${item.id}`}
             key={item.id}
-            className="flex flex-col justify-center m-2"
+            className="flex flex-col justify-center m-2 transition-all duration-300 hover:scale-105"
           >
             <div className="max-w-md rounded-lg overflow-hidden shadow-sm bg-white ">
               <Image
@@ -107,6 +107,7 @@ const TopRatedCarousel = () => {
                 width="100%"
                 height={300}
                 className="w-full object-cover"
+                isZoomed
               />
             </div>
             <div className="px-2 py-4">

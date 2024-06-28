@@ -20,14 +20,16 @@ const ProductCard = ({ product, showFarmer = true }: CardItemsProps) => {
         className="flex flex-col max-w-[250px] justify-center m-2"
       >
         <div className="w-full rounded-lg overflow-hidden shadow-sm bg-white ">
-          <Image
-            src={product.image}
-            alt="Sunrise Orchard"
-            width="100%"
-            height={300}
-            className="w-full object-cover"
-            isZoomed
-          />
+          <Link href={`/products/${product.id}`}>
+            <Image
+              src={product.image}
+              alt="Sunrise Orchard"
+              width="100%"
+              height={300}
+              className="w-full object-cover"
+              isZoomed
+            />
+          </Link>
         </div>
         <div className="px-2 py-4">
           <div className="flex justify-between items-center">
@@ -49,12 +51,12 @@ const ProductCard = ({ product, showFarmer = true }: CardItemsProps) => {
             <span className="text-md font-semibold text-yellow-600">4.5</span>
           </div>
           <div className="flex justify-evenly items-center text-sm mt-2 text-gray-600 font-semibold">
-            <Link
+            {/* <Link
               href={`/products/${product.id}`}
               className="underline underline-offset-4 hover:opacity-75"
             >
               View Product
-            </Link>
+            </Link> */}
             <p
               className="underline underline-offset-4 hover:opacity-75 cursor-pointer"
               onClick={() => addToCart(product)}
