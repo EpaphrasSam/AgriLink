@@ -20,7 +20,7 @@ const mockConversations = [
       avatar: "/logo.png",
     },
     lastMessage: {
-      body: "Hi there! What's up?",
+      imageUrl: "/path/to/image.jpg",
       timestamp: new Date().toISOString(),
     },
   },

@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar } from "@nextui-org/react";
 import { format } from "date-fns";
 import Link from "next/link";
+import { FaImage } from "react-icons/fa";
 
 interface ConversationItemProps {
   conversation: {
@@ -11,7 +12,8 @@ interface ConversationItemProps {
       avatar: string;
     };
     lastMessage: {
-      body: string;
+      body?: string;
+      imageUrl?: string;
       timestamp: string;
     };
   };
@@ -43,7 +45,13 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           </span>
         </div>
         <p className="text-sm text-gray-500 truncate">
-          {conversation.lastMessage.body}
+          {conversation.lastMessage.body ? (
+            conversation.lastMessage.body
+          ) : (
+            <span className="flex items-center">
+              <FaImage className="mr-1" /> Photo
+            </span>
+          )}
         </p>
       </div>
     </Link>

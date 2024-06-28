@@ -9,7 +9,8 @@ interface ConversationListProps {
       avatar: string;
     };
     lastMessage: {
-      body: string;
+      body?: string;
+      imageUrl?: string;
       timestamp: string;
     };
   }[];
