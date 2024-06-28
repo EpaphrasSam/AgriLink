@@ -30,7 +30,7 @@ export const farmerNavigationLinks = [
   {
     name: "Interactions",
     icon: <FaComments />,
-    route: "/farmer-portal/interactions",
+    route: "/farmer-portal/interactions?tab=forum",
   },
   { name: "Profile", icon: <FaUser />, route: "/farmer-portal/profile" },
 ];

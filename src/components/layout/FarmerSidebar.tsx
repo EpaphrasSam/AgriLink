@@ -23,6 +23,13 @@ const FarmerSideBar = () => {
     }
   }, [isMdOrAbove]);
 
+  const isLinkActive = (link: any) => {
+    if (link.route.includes("?")) {
+      return pathname.startsWith(link.route.split("?")[0]);
+    }
+    return pathname === link.route;
+  };
+
   return (
     <div
       className={`flex flex-col ${
@@ -54,7 +61,7 @@ const FarmerSideBar = () => {
           <Link href={link.route} key={index}>
             <div
               className={`flex items-center text-gray-800 p-3 max-md:mb-0 mb-4 rounded-lg hover:opacity-75 transition-colors duration-200 ${
-                pathname === link.route ? "bg-blue-500 text-white" : ""
+                isLinkActive(link) ? "bg-blue-500 text-white" : ""
               } ${isMobile ? "flex-col" : ""}`}
             >
               <span className="text-xl">{link.icon}</span>

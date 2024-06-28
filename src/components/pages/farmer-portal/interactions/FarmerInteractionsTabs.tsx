@@ -1,4 +1,10 @@
-import ForumListing from "@/components/pages/forum/ForumListing";
+"use client";
+
+import { Tab, Tabs } from "@nextui-org/react";
+import React from "react";
+import FarmerForum from "./FarmerForum";
+import FarmerChats from "./FarmerChats";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const forums = [
   {
@@ -35,12 +41,34 @@ const forums = [
   },
 ];
 
-export default function Forum() {
+const FarmerInteractionsTabs = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const tab = searchParams.get("tab");
+
+  const handleTabChange = (key: any) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("tab", key);
+    router.push(`?${newParams.toString()}`);
+  };
   return (
-    <div className="p-6 flex justify-center items-center">
-      <div className="max-w-3xl w-full">
-        <ForumListing forums={forums} />
-      </div>
-    </div>
+    <Tabs
+      selectedKey={tab}
+      size="lg"
+      fullWidth
+      color="primary"
+      variant="solid"
+      onSelectionChange={handleTabChange}
+    >
+      <Tab key="forum" title="Forum">
+        <FarmerForum forums={forums} />
+      </Tab>
+      <Tab key="chats" title="Chats">
+        <FarmerChats />
+      </Tab>
+    </Tabs>
   );
-}
+};
+
+export default FarmerInteractionsTabs;
