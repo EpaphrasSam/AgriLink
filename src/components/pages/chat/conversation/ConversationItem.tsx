@@ -22,7 +22,7 @@ interface ConversationItemProps {
 const ConversationItem: React.FC<ConversationItemProps> = ({
   conversation,
 }) => {
-  const isFarmer = true;
+  const isFarmer = false;
   return (
     <Link
       href={
