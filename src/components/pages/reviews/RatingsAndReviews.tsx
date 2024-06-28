@@ -176,26 +176,6 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                 </div>
               </div>
               {review.comment && <p className="mt-2">{review.comment}</p>}
-              <div className="replies ml-10 mt-2">
-                {review.replies.map((reply) => (
-                  <div key={reply.id} className="reply mb-2">
-                    <div className="flex items-center">
-                      <Image
-                        src={reply.userImage}
-                        alt={reply.user}
-                        width={30}
-                        height={30}
-                        className="rounded-full"
-                      />
-                      <div className="ml-4">
-                        <p className="font-bold">{reply.user}</p>
-                        <p className="text-gray-500 text-sm">{reply.date}</p>
-                      </div>
-                    </div>
-                    <p className="ml-10 mt-1">{reply.comment}</p>
-                  </div>
-                ))}
-              </div>
               {isUserLoggedIn && (
                 <div className="reply-section mt-2">
                   {activeReviewId === review.id ? (
@@ -230,7 +210,7 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                     </div>
                   ) : (
                     <button
-                      className="text-blue-500 underline underline-offset-4 hover:opacity-75"
+                      className="hover:opacity-75 text-sm font-semibold"
                       onClick={() => setActiveReviewId(review.id)}
                     >
                       Reply
@@ -238,6 +218,26 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                   )}
                 </div>
               )}
+              <div className="replies ml-10 mt-2">
+                {review.replies.map((reply) => (
+                  <div key={reply.id} className="reply mb-2">
+                    <div className="flex items-center">
+                      <Image
+                        src={reply.userImage}
+                        alt={reply.user}
+                        width={30}
+                        height={30}
+                        className="rounded-full"
+                      />
+                      <div className="ml-4">
+                        <p className="font-bold">{reply.user}</p>
+                        <p className="text-gray-500 text-sm">{reply.date}</p>
+                      </div>
+                    </div>
+                    <p className="ml-10 mt-1">{reply.comment}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
       </div>
