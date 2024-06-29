@@ -75,7 +75,7 @@ const Cart = () => {
                     <Card
                       key={product.id}
                       radius="none"
-                      className="w-64 h-72 m-4 rounded-lg"
+                      className="w-64 h-72 flex-shrink-0 m-4 rounded-lg"
                     >
                       <CardBody className="p-0">
                         <Link href={`/products/${product.id}`}>

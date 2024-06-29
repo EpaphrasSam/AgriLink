@@ -257,11 +257,7 @@ const FarmerProfile: React.FC = () => {
             <label className="font-semibold text-lg text-gray-500 mb-1 capitalize">
               Change Password
             </label>
-            <div
-              className={`flex gap-2 items-start ${
-                isEditing.password ? "flex-col" : "flex-row"
-              }`}
-            >
+            <div className={`flex gap-2 items-start flex-col`}>
               {isEditing.password ? (
                 <>
                   <Input
@@ -309,13 +305,15 @@ const FarmerProfile: React.FC = () => {
               ) : (
                 <>
                   <p className="text-base font-medium flex-1">********</p>
-                  <FaEdit
-                    className="cursor-pointer text-gray-500 hover:opacity-75"
-                    size={20}
+                  <Button
+                    radius="sm"
+                    color="default"
                     onClick={() =>
                       setIsEditing((prev) => ({ ...prev, password: true }))
                     }
-                  />
+                  >
+                    Change Password
+                  </Button>
                 </>
               )}
             </div>
