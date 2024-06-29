@@ -331,7 +331,7 @@ const Signup = () => {
                 >
                   Close
                 </Button>
-                <Button color="primary" type="submit" onPress={onClose}>
+                <Button color="primary" type="submit">
                   Submit
                 </Button>
               </ModalFooter>
