@@ -29,6 +29,14 @@ export type FormData = {
   confirmPassword: string;
 };
 
+export type ModalFormData = {
+  town: string;
+  biography: string;
+  about: string;
+  region: string;
+  image: FileList;
+};
+
 export const UserSchema: ZodType<FormData> = z
   .object({
     email: z.string().email(),
@@ -43,6 +51,16 @@ export const UserSchema: ZodType<FormData> = z
     message: "Passwords do not match",
     path: ["confirmPassword"], // path of error
   });
+
+export const ModalSchema: ZodType<ModalFormData> = z.object({
+  town: z.string().min(2, { message: "Town is too short" }),
+  biography: z.string().min(10, { message: "Biography is too short" }),
+  about: z.string().min(10, { message: "About is too short" }),
+  region: z.string().nonempty({ message: "Region is required" }),
+  image: z.instanceof(FileList).refine((files) => files.length > 0, {
+    message: "Image is required",
+  }),
+});
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -64,6 +82,14 @@ const Signup = () => {
 
   console.log(errors);
 
+  const {
+    register: registerModal,
+    handleSubmit: handleSubmitModal,
+    formState: { errors: modalErrors },
+  } = useForm<ModalFormData>({
+    resolver: zodResolver(ModalSchema),
+  });
+
   const onSubmit = async (data: FormData) => {
     // Check for errors
     if (Object.keys(errors).length === 0) {
@@ -76,6 +102,11 @@ const Signup = () => {
         console.log("Customer signup successful");
       }
     }
+  };
+
+  const onSubmitModal = async (data: ModalFormData) => {
+    console.log("MODAL SUCCESS", data);
+    onClose();
   };
 
   const handleFarmerSignup = () => {
@@ -227,58 +258,85 @@ const Signup = () => {
             Farmer Additional Information
           </ModalHeader>
           <ModalBody className="flex flex-col gap-4">
-            <div>
-              <Input
-                type="text"
-                placeholder="Enter your town"
-                label="Town"
-                radius="sm"
-                labelPlacement="outside"
-              />
-            </div>
-            <div>
-              <Input
-                type="text"
-                placeholder="Enter your Biography"
-                label="Biography"
-                radius="sm"
-                labelPlacement="outside"
-              />
-            </div>
-            <div>
-              <Input
-                type="text"
-                placeholder="Enter about your farm"
-                label="About"
-                radius="sm"
-                labelPlacement="outside"
-              />
-            </div>
-            <div>
-              <Select radius="sm" label="Select a Region" className="max-w-xs">
-                {regions.map((region) => (
-                  <SelectItem key={region}>{region}</SelectItem>
-                ))}
-              </Select>
-            </div>
-            <div>
-              <Input
-                type="file"
-                accept="image/*"
-                label="Upload your farm image"
-                radius="sm"
-                labelPlacement="outside"
-              />
-            </div>
+            <form onSubmit={handleSubmitModal(onSubmitModal)}>
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Enter your town"
+                  label="Town"
+                  radius="sm"
+                  labelPlacement="outside"
+                  {...registerModal("town")}
+                  isInvalid={!!modalErrors.town}
+                  errorMessage={modalErrors.town?.message}
+                />
+              </div>
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Enter your Biography"
+                  label="Biography"
+                  radius="sm"
+                  labelPlacement="outside"
+                  {...registerModal("biography")}
+                  isInvalid={!!modalErrors.biography}
+                  errorMessage={modalErrors.biography?.message}
+                />
+              </div>
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Enter about your farm"
+                  label="About"
+                  radius="sm"
+                  labelPlacement="outside"
+                  {...registerModal("about")}
+                  isInvalid={!!modalErrors.about}
+                  errorMessage={modalErrors.about?.message}
+                />
+              </div>
+              <div>
+                <Select
+                  radius="sm"
+                  label="Select a Region"
+                  className="max-w-xs"
+                  onChange={handleSelectionChange}
+                  isInvalid={!!modalErrors.region}
+                  errorMessage={modalErrors.region?.message}
+                >
+                  {regions.map((region) => (
+                    <SelectItem key={region}>{region}</SelectItem>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  label="Upload your farm image"
+                  radius="sm"
+                  labelPlacement="outside"
+                  {...registerModal("image")}
+                  isInvalid={!!modalErrors.image}
+                  errorMessage={modalErrors.image?.message}
+                />
+              </div>
+
+              <ModalFooter>
+                <Button
+                  color="danger"
+                  type="button"
+                  variant="light"
+                  onPress={onClose}
+                >
+                  Close
+                </Button>
+                <Button color="primary" type="submit">
+                  Submit
+                </Button>
+              </ModalFooter>
+            </form>
           </ModalBody>
-          <ModalFooter>
-            <Button color="danger" variant="light" onPress={onClose}>
-              Close
-            </Button>
-            <Button color="primary" onPress={onClose}>
-              Submit
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </div>
