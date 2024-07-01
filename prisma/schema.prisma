@@ -19,6 +19,7 @@ model User {
   conversations2 Conversation[] @relation("User2Conversations")
   forumPosts  ForumPost[]
   messages    Message[]
+  orders      Order[]
 }
 
 model Farmer {
@@ -43,6 +44,19 @@ model Product {
   farmer      Farmer         @relation(fields: [farmerId], references: [id])
   farmerId    String         @db.ObjectId
   reviews     Review[]
+  orders      Order[]
+}
+
+model Order {
+  id          String   @id @default(cuid()) @map("_id") @db.ObjectId
+  orderID     String   @unique
+  createdAt   DateTime @default(now())
+  amount      Float
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @db.ObjectId
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   String   @db.ObjectId
+  status      String
 }
 
 model Review {

@@ -21,20 +21,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import FarmerModal from "@/components/global/FarmerModal";
 
 export type FormData = {
   email: string;
   username: string;
   password: string;
   confirmPassword: string;
-};
-
-export type ModalFormData = {
-  town: string;
-  biography: string;
-  about: string;
-  region: string;
-  image: FileList;
 };
 
 export const UserSchema: ZodType<FormData> = z
@@ -49,28 +42,16 @@ export const UserSchema: ZodType<FormData> = z
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["confirmPassword"], // path of error
+    path: ["confirmPassword"],
   });
-
-export const ModalSchema: ZodType<ModalFormData> = z.object({
-  town: z.string().min(2, { message: "Town is too short" }),
-  biography: z.string().min(10, { message: "Biography is too short" }),
-  about: z.string().min(10, { message: "About is too short" }),
-  region: z.string().nonempty({ message: "Region is required" }),
-  image: z.instanceof(FileList).refine((files) => files.length > 0, {
-    message: "Image is required",
-  }),
-});
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedRegion, setSelectedRegion] = useState(
-    new Set(["Select Region"])
-  );
   const [signupType, setSignupType] = useState("");
+  const [formData, setFormData] = useState<FormData | null>(null);
   const {
     register,
     handleSubmit,
@@ -80,22 +61,13 @@ const Signup = () => {
     resolver: zodResolver(UserSchema), // Apply the zodResolver
   });
 
-  console.log(errors);
-
-  const {
-    register: registerModal,
-    handleSubmit: handleSubmitModal,
-    formState: { errors: modalErrors },
-  } = useForm<ModalFormData>({
-    resolver: zodResolver(ModalSchema),
-  });
-
   const onSubmit = async (data: FormData) => {
     // Check for errors
     if (Object.keys(errors).length === 0) {
       console.log("SUCCESS", data);
       // Open the modal if signing up as farmer
       if (signupType === "farmer") {
+        setFormData(data);
         onOpen();
       } else {
         // Handle customer signup success
@@ -104,44 +76,12 @@ const Signup = () => {
     }
   };
 
-  const onSubmitModal = async (data: ModalFormData) => {
-    console.log("MODAL SUCCESS", data);
-    onClose();
-  };
-
   const handleFarmerSignup = () => {
     setSignupType("farmer");
-    handleSubmit(onSubmit)();
   };
+
   const handleCustomerSignup = () => {
     setSignupType("customer");
-  };
-
-  const regions = [
-    "Greater Accra Region",
-    "Ashanti Region",
-    "Central Region",
-    "Oti Region",
-    "Eastern Region",
-    "Brong Ahafo Region",
-    "Northern Region",
-    "Upper East Region",
-    "Upper West Region",
-    "Western Region",
-    "Savannah Region",
-    "Bono East Region",
-    "Ahafo Region",
-    "North East Region",
-    "Western North Region",
-    "Volta Region",
-  ];
-
-  const selectedValue = useMemo(
-    () => Array.from(selectedRegion).join(", ").replaceAll("_", " "),
-    [selectedRegion]
-  );
-  const handleSelectionChange = (keys: any) => {
-    setSelectedRegion(new Set(keys));
   };
 
   return (
@@ -223,20 +163,22 @@ const Signup = () => {
               }
             />
           </div>
-          <div className="flex gap-4">
+          <div className="flex justify-evenly gap-4 mt-4">
             <Button
-              type="button"
-              className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-md hover:bg-indigo-700 focus:bg-indigo-700 focus:outline-none"
-              onPress={handleFarmerSignup}
-            >
-              Signup as Farmer
-            </Button>
-            <Button
+              color="primary"
               type="submit"
-              className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-md hover:bg-indigo-700 focus:bg-indigo-700 focus:outline-none"
-              onPress={handleCustomerSignup}
+              fullWidth
+              onClick={handleCustomerSignup}
             >
               Signup as Customer
+            </Button>
+            <Button
+              color="primary"
+              type="submit"
+              fullWidth
+              onClick={handleFarmerSignup}
+            >
+              Signup as Farmer
             </Button>
           </div>
 
@@ -251,94 +193,7 @@ const Signup = () => {
           </div>
         </form>
       </div>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
-            Farmer Additional Information
-          </ModalHeader>
-          <ModalBody className="flex flex-col gap-4">
-            <form onSubmit={handleSubmitModal(onSubmitModal)}>
-              <div>
-                <Input
-                  type="text"
-                  placeholder="Enter your town"
-                  label="Town"
-                  radius="sm"
-                  labelPlacement="outside"
-                  {...registerModal("town")}
-                  isInvalid={!!modalErrors.town}
-                  errorMessage={modalErrors.town?.message}
-                />
-              </div>
-              <div>
-                <Input
-                  type="text"
-                  placeholder="Enter your Biography"
-                  label="Biography"
-                  radius="sm"
-                  labelPlacement="outside"
-                  {...registerModal("biography")}
-                  isInvalid={!!modalErrors.biography}
-                  errorMessage={modalErrors.biography?.message}
-                />
-              </div>
-              <div>
-                <Input
-                  type="text"
-                  placeholder="Enter about your farm"
-                  label="About"
-                  radius="sm"
-                  labelPlacement="outside"
-                  {...registerModal("about")}
-                  isInvalid={!!modalErrors.about}
-                  errorMessage={modalErrors.about?.message}
-                />
-              </div>
-              <div>
-                <Select
-                  radius="sm"
-                  label="Select a Region"
-                  className="max-w-xs"
-                  onChange={handleSelectionChange}
-                  isInvalid={!!modalErrors.region}
-                  errorMessage={modalErrors.region?.message}
-                >
-                  {regions.map((region) => (
-                    <SelectItem key={region}>{region}</SelectItem>
-                  ))}
-                </Select>
-              </div>
-              <div>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  label="Upload your farm image"
-                  radius="sm"
-                  labelPlacement="outside"
-                  {...registerModal("image")}
-                  isInvalid={!!modalErrors.image}
-                  errorMessage={modalErrors.image?.message}
-                />
-              </div>
-
-              <ModalFooter>
-                <Button
-                  color="danger"
-                  type="button"
-                  variant="light"
-                  onPress={onClose}
-                >
-                  Close
-                </Button>
-                <Button color="primary" type="submit">
-                  Submit
-                </Button>
-              </ModalFooter>
-            </form>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <FarmerModal isOpen={!isOpen} onClose={onClose} formData={formData!} />
     </div>
   );
 };
