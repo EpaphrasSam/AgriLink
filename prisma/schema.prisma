@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
+  name        String
+  email       String         @unique
+  password    String
+  role        Role
+  farmer      Farmer?        
+  reviews     Review[]
+  conversations1 Conversation[] @relation("User1Conversations")
+  conversations2 Conversation[] @relation("User2Conversations")
+  forumPosts  ForumPost[]
+  messages    Message[]
+}
+
+model Farmer {
+  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
+  user        User           @relation(fields: [userId], references: [id])
+  userId      String         @unique @db.ObjectId
+  bio         String
+  region      String
+  town        String
+  image       String
+  products    Product[]
+}
+
+model Product {
+  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  price       Float
+  category    String
+  rating      Float
+  images      String[]
+  farmer      Farmer         @relation(fields: [farmerId], references: [id])
+  farmerId    String         @db.ObjectId
+  reviews     Review[]
+}
+
+model Review {
+  id             String       @id @default(cuid()) @map("_id") @db.ObjectId
+  rating         Int
+  comment        String
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String       @db.ObjectId
+  product        Product      @relation(fields: [productId], references: [id])
+  productId      String       @db.ObjectId
+  replies        Review[]     @relation("ReviewReplies")
+  parentReview   Review?      @relation("ReviewReplies", fields: [parentReviewId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentReviewId String?      @db.ObjectId
+}
+
+model Message {
+  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
+  content     String
+  sender      User           @relation(fields: [senderId], references: [id])
+  senderId    String         @db.ObjectId
+  conversation Conversation  @relation(fields: [conversationId], references: [id])
+  conversationId String      @db.ObjectId
+}
+
+model Conversation {
+  id            String         @id @default(cuid()) @map("_id") @db.ObjectId
+  messages      Message[]
+  user1         User           @relation("User1Conversations", fields: [user1Id], references: [id])
+  user1Id       String         @db.ObjectId
+  user2         User           @relation("User2Conversations", fields: [user2Id], references: [id])
+  user2Id       String         @db.ObjectId
+}
+
+model Forum {
+  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  posts       ForumPost[]
+}
+
+model ForumPost {
+  id          String       @id @default(cuid()) @map("_id") @db.ObjectId
+  content     String
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String       @db.ObjectId
+  forum       Forum        @relation(fields: [forumId], references: [id])
+  forumId     String       @db.ObjectId
+  replies     ForumPost[]  @relation("ForumPostReplies")
+  parentPost  ForumPost?   @relation("ForumPostReplies", fields: [parentPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentPostId String?     @db.ObjectId
+}
+
+enum Role {
+  FARMER
+  CONSUMER
+  ADMIN
+}
