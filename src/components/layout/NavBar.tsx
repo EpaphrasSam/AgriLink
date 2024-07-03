@@ -15,6 +15,8 @@ import {
   DropdownMenu,
   DropdownItem,
   Divider,
+  Spinner,
+  Skeleton,
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,17 +34,21 @@ import { usePathname, useRouter } from "next/navigation";
 import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/useCartStore";
 import { NavbarLinks } from "@/lib/routes";
+import { useSession } from "next-auth/react";
+import { logoutAction } from "@/services/authService";
+import toast from "react-hot-toast";
 
 const NavBar = () => {
+  const { data: session, status } = useSession();
   const pathname = usePathname();
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
-  const isLoggedIn = true;
   const totalItems = useStore(useCartStore, (state) =>
     state.calculateTotalItems()
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     return scrollY.on("change", (y) => {
@@ -63,6 +69,19 @@ const NavBar = () => {
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
+
+  const logOut = async () => {
+    try {
+      setIsLoading(true);
+      await logoutAction();
+      toast.success("Logout successful");
+      window.location.href = "/";
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Navbar
@@ -139,7 +158,11 @@ const NavBar = () => {
               />
             </Badge>
           </Link>
-          {isLoggedIn ? (
+          {status === "loading" ? (
+            <Skeleton className="w-8 h-8 rounded-full">
+              <Avatar size="sm" isBordered />
+            </Skeleton>
+          ) : session?.user ? (
             <Dropdown placement="bottom-end" showArrow>
               <DropdownTrigger>
                 <Avatar
@@ -173,9 +196,13 @@ const NavBar = () => {
                   startContent={<IoLogOutOutline size={20} />}
                   key="logout"
                   color="danger"
+                  onClick={logOut}
+                  isDisabled={isLoading}
                   className="text-danger"
                 >
-                  Log Out
+                  <div className="flex items-center gap-2">
+                    {isLoading && <Spinner size="sm" color="danger" />} Log Out
+                  </div>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>

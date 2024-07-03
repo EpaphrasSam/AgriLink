@@ -2,26 +2,39 @@ import type { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../prisma";
 import { passwordValidator } from "../../helpers/bcryptValidator";
-
-interface AuthorizeRequest extends Request {
-  options?: {
-    fetchUserByEmail?: boolean;
-  };
-}
+import { Role } from "@prisma/client";
 
 async function validateUser(
-  email: string,
-  password: string
+  username: string,
+  password: string,
+  loginType: Role
 ): Promise<any | null> {
   const user = await prisma.user.findUnique({
     where: {
-      email,
+      username,
+    },
+    include: {
+      farmer: {
+        select: {
+          id: true,
+          bio: true,
+          region: true,
+          town: true,
+          image: true,
+        },
+      },
     },
   });
 
   if (!user || !user.password) {
     throw new Error("Invalid credentials");
   }
+
+  if (loginType === Role.FARMER && user.role !== Role.FARMER) {
+    throw new Error("No Farmer Account found");
+  }
+
+  console.log("role", loginType);
 
   const isCorrectPassword = await passwordValidator(password, user.password);
   if (!isCorrectPassword) {
@@ -30,47 +43,37 @@ async function validateUser(
 
   return user;
 }
+
 export default {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
+        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
+        loginType: { label: "Login Type", type: "text" },
       },
       async authorize(credentials, req): Promise<any | null> {
-        const body = await req.json();
-        const { fetchUserByEmail } = body;
         if (
-          fetchUserByEmail &&
-          credentials.email &&
-          typeof credentials.email === "string"
-        ) {
-          const user = await prisma.user.findUnique({
-            where: {
-              email: credentials?.email!,
-            },
-          });
-          if (!user) throw Error("Invalid credentials");
-          return user;
-        } else if (
           !credentials ||
-          typeof credentials.email !== "string" ||
-          typeof credentials.password !== "string"
+          typeof credentials.username !== "string" ||
+          typeof credentials.password !== "string" ||
+          typeof credentials.loginType !== "string"
         ) {
           throw Error("Invalid credentials");
         }
         try {
           const user = await validateUser(
-            credentials.email,
-            credentials.password
+            credentials.username,
+            credentials.password,
+            credentials.loginType as Role
           );
           if (!user) {
             throw new Error("Invalid credentials");
           }
           return user;
-        } catch (error) {
-          throw new Error("Invalid credentials");
+        } catch (error: any) {
+          throw new Error(error.message);
         }
       },
     }),

@@ -19,6 +19,11 @@ import {
 import { FormData } from "../pages/signup/Signup";
 import { regions } from "@/lib/constants";
 import { FaCamera } from "react-icons/fa";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Role } from "@prisma/client";
+import { useState } from "react";
 
 export type ModalFormData = {
   town: string;
@@ -42,9 +47,17 @@ type FarmerModalProps = {
   isOpen: boolean;
   onClose: () => void;
   formData?: FormData;
+  userId?: string;
 };
 
-const FarmerModal = ({ isOpen, onClose, formData }: FarmerModalProps) => {
+const FarmerModal = ({
+  isOpen,
+  onClose,
+  formData,
+  userId,
+}: FarmerModalProps) => {
+  const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -57,8 +70,29 @@ const FarmerModal = ({ isOpen, onClose, formData }: FarmerModalProps) => {
   const image = watch("image");
 
   const onSubmitModal = async (data: ModalFormData) => {
-    console.log("MODAL SUCCESS", { ...formData, ...data });
-    onClose();
+    setIsLoading(true);
+    const userIdToUse = userId || session?.user?.id;
+    const payload = {
+      ...formData,
+      ...data,
+      role: Role.FARMER,
+      userId: userIdToUse,
+    };
+
+    try {
+      const response = await axios.post("/api/signup", payload);
+
+      if (response.status === 200) {
+        toast.success("Farmer profile created successfully");
+        onClose();
+      } else {
+        toast.error("Failed to create farmer profile");
+      }
+    } catch (error) {
+      toast.error("Failed to create farmer profile");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -149,7 +183,7 @@ const FarmerModal = ({ isOpen, onClose, formData }: FarmerModalProps) => {
               >
                 Close
               </Button>
-              <Button color="primary" type="submit">
+              <Button color="primary" type="submit" isLoading={isLoading}>
                 Submit
               </Button>
             </ModalFooter>

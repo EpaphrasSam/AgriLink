@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
-  name        String
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  username    String         @unique
   email       String         @unique
   password    String
   role        Role
@@ -23,7 +23,7 @@ model User {
 }
 
 model Farmer {
-  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
   user        User           @relation(fields: [userId], references: [id])
   userId      String         @unique @db.ObjectId
   bio         String
@@ -34,7 +34,7 @@ model Farmer {
 }
 
 model Product {
-  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   price       Float
@@ -48,7 +48,7 @@ model Product {
 }
 
 model Order {
-  id          String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   orderID     String   @unique
   createdAt   DateTime @default(now())
   amount      Float
@@ -60,7 +60,7 @@ model Order {
 }
 
 model Review {
-  id             String       @id @default(cuid()) @map("_id") @db.ObjectId
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
   rating         Int
   comment        String
   user           User         @relation(fields: [userId], references: [id])
@@ -73,7 +73,7 @@ model Review {
 }
 
 model Message {
-  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
   content     String
   sender      User           @relation(fields: [senderId], references: [id])
   senderId    String         @db.ObjectId
@@ -82,7 +82,7 @@ model Message {
 }
 
 model Conversation {
-  id            String         @id @default(cuid()) @map("_id") @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   messages      Message[]
   user1         User           @relation("User1Conversations", fields: [user1Id], references: [id])
   user1Id       String         @db.ObjectId
@@ -91,14 +91,14 @@ model Conversation {
 }
 
 model Forum {
-  id          String         @id @default(cuid()) @map("_id") @db.ObjectId
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
   posts       ForumPost[]
 }
 
 model ForumPost {
-  id          String       @id @default(cuid()) @map("_id") @db.ObjectId
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
   content     String
   user        User         @relation(fields: [userId], references: [id])
   userId      String       @db.ObjectId
@@ -112,5 +112,4 @@ model ForumPost {
 enum Role {
   FARMER
   CONSUMER
-  ADMIN
 }
