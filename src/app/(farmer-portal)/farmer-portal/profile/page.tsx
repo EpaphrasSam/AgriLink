@@ -1,9 +1,14 @@
 import FarmerProfile from "@/components/pages/farmer-portal/profile/FarmerProfile";
+import { auth } from "@/utils/auth/auth";
 
-export default function FarmerProfilePage() {
+export default async function FarmerProfilePage() {
+  const session = await auth();
   return (
     <div className="p-6">
-      <FarmerProfile />
+      <FarmerProfile
+        farmerDetails={session?.user?.farmerDetails!}
+        username={session?.user?.username!}
+      />
     </div>
   );
 }

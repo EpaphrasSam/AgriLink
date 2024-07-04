@@ -19,14 +19,18 @@ async function validateUser(
         select: {
           id: true,
           name: true,
+          about: true,
           bio: true,
           region: true,
           town: true,
           image: true,
+          paystackAccountId: true,
         },
       },
     },
   });
+
+  console.log(user);
 
   if (!user || !user.password) {
     throw new Error("Invalid credentials");

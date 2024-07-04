@@ -14,8 +14,10 @@ declare module "next-auth" {
         name: string;
         bio: string;
         region: string;
+        about: string;
         town: string;
         image: string;
+        paystackAccountId: string | null;
       } | null;
     };
   }

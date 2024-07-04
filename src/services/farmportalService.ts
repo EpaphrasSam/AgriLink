@@ -2,7 +2,7 @@
 
 import { FarmerOrders } from "@/types/OrdersTypes";
 import prisma from "@/utils/prisma";
-import { Product } from "@prisma/client";
+import { Product, Farmer } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export const getFarmerStats = async (farmerId: string) => {
@@ -212,6 +212,31 @@ export const deleteProduct = async (productId: string) => {
     });
 
     revalidatePath("/farmer-portal/products");
+    return {
+      success: true,
+      error: null,
+    };
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+};
+
+export const updateFarmerDetails = async (
+  farmerId: string,
+  details: Partial<Farmer>
+) => {
+  try {
+    console.log(details);
+    await prisma.farmer.update({
+      where: { id: farmerId },
+      data: details,
+    });
+
+    revalidatePath("/farmer-portal/profile");
     return {
       success: true,
       error: null,
