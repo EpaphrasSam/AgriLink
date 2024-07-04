@@ -5,17 +5,31 @@ import prisma from "@/utils/prisma";
 import { Product } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-export const getFarmerStats = async (userId: string) => {
+export const getFarmerStats = async (farmerId: string) => {
   try {
     const result = await prisma.$transaction([
       prisma.order.aggregate({
+        where: {
+          farmerId,
+        },
         _sum: {
           amount: true,
         },
       }),
-      prisma.order.count(),
-      prisma.product.count(),
+      prisma.order.count({
+        where: {
+          farmerId,
+        },
+      }),
+      prisma.product.count({
+        where: {
+          farmerId,
+        },
+      }),
       prisma.review.aggregate({
+        where: {
+          farmerId,
+        },
         _avg: {
           rating: true,
         },
