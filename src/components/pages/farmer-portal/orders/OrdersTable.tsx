@@ -223,7 +223,7 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
 
   return (
     <>
-      <Card className="w-full max-w-screen-md overflow-x-auto">
+      <Card className="w-full overflow-x-auto">
         <CardHeader>
           {isRecentOnly ? (
             <div className="w-full flex justify-between">

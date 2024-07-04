@@ -10,7 +10,7 @@ export default function FarmerLayout({
     <div className="flex flex-col">
       <FarmerHeader />
       <div
-        className={`flex max-md:flex-col-reverse w-full min-h-screen relative `}
+        className={`flex max-md:flex-col-reverse w-full min-h-screen relative`}
       >
         <div className="max-md:sticky max-md:bottom-0 max-md:mb-0 md:sticky md:top-0 md:self-start md:h-screen z-10 bg-white backdrop-filter backdrop-blur-lg">
           <FarmerSideBar />

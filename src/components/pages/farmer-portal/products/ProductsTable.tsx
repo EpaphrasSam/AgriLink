@@ -21,27 +21,30 @@ import { CiSearch } from "react-icons/ci";
 import ProductsModal from "./ProductsModal";
 import { categories } from "@/lib/constants";
 import CustomModal from "@/components/global/CustomModal";
+import { addProduct, deleteProduct } from "@/services/farmportalService";
+import { useSession } from "next-auth/react";
+import { generateSlug } from "@/helpers/generateSlug";
+import toast from "react-hot-toast";
+import { ProductWithReviews } from "@/types/ProductTypes";
 
 interface ProductsTableProps {
-  products: {
-    id: string;
-    name: string;
-    price: number;
-    rating: number;
-    category: string;
-    description: string;
-    images: string[];
-  }[];
+  products: ProductWithReviews[];
 }
 
 const ProductsTable = ({ products }: ProductsTableProps) => {
+  const { data: session } = useSession();
+  const farmerId = session?.user?.id;
+  const [loading, setLoading] = useState(false);
+
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductWithReviews | null>(null);
 
   const filteredProducts = useMemo(() => {
     let filtered = products;
@@ -72,12 +75,59 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
 
   const isEmpty = filteredProducts.length === 0;
 
-  const handleSaveProduct = (product: any) => {
-    console.log("Saved product:", product);
+  const handleSaveProduct = async (product: any) => {
+    if (!session) return;
+    setLoading(true);
+
+    const slug = generateSlug(
+      product.name,
+      session?.user?.farmerDetails?.name!
+    );
+    const productData = {
+      ...product,
+      price: parseFloat(product.price),
+      slug,
+      farmerId,
+    };
+
+    try {
+      const { success, error } = await addProduct(productData);
+
+      if (error) {
+        toast.error("Error in adding product");
+      } else {
+        toast.success(
+          productData.id
+            ? "Product updated successfully"
+            : "Product added successfully"
+        );
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+      setIsModalOpen(false);
+    }
   };
 
-  const handleDeleteProduct = () => {
-    console.log("Deleted product");
+  const handleDeleteProduct = async () => {
+    if (!selectedProduct) return;
+    setIsDeleting(true);
+
+    try {
+      const { success, error } = await deleteProduct(selectedProduct.id);
+
+      if (error) {
+        toast.error("Error in deleting product");
+      } else {
+        toast.success("Product deleted successfully");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+    }
   };
 
   useEffect(() => {
@@ -166,14 +216,17 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
               </TableBody>
             ) : (
               <TableBody items={items} aria-colspan={3}>
-                {(item: any) => (
+                {(item: ProductWithReviews) => (
                   <TableRow key={item.id}>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>GHS {item.price}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
                         <AiFillStar size={20} color="#FFC107" />
-                        {item.rating}
+                        {item.reviews.reduce(
+                          (acc, curr) => acc + curr.rating,
+                          0
+                        ) / item.reviews.length || "N/A"}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -214,6 +267,7 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
           onClose={() => setIsModalOpen(false)}
           product={selectedProduct}
           onSave={handleSaveProduct}
+          isLoading={loading}
         />
       )}
 
@@ -227,6 +281,7 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
           cancelLabel="Cancel"
           color="danger"
           onConfirm={handleDeleteProduct}
+          isLoading={isDeleting}
         />
       )}
     </>

@@ -2,24 +2,27 @@
 
 import { FarmerOrders } from "@/types/OrdersTypes";
 import prisma from "@/utils/prisma";
+import { Product } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export const getFarmerStats = async () => {
   try {
-    const totalSales = await prisma.order.aggregate({
-      _sum: {
-        amount: true,
-      },
-    });
+    const result = await prisma.$transaction([
+      prisma.order.aggregate({
+        _sum: {
+          amount: true,
+        },
+      }),
+      prisma.order.count(),
+      prisma.product.count(),
+      prisma.review.aggregate({
+        _avg: {
+          rating: true,
+        },
+      }),
+    ]);
 
-    const ordersCount = await prisma.order.count();
-    const productsCount = await prisma.product.count();
-
-    const averageRating = await prisma.review.aggregate({
-      _avg: {
-        rating: true,
-      },
-    });
+    const [totalSales, ordersCount, productsCount, averageRating] = result;
 
     return {
       stats: {
@@ -118,6 +121,76 @@ export const updateOrderStatus = async (orderId: string, action: string) => {
       error: null,
     };
   } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+};
+
+export const getFarmerProducts = async (farmerId: string) => {
+  try {
+    const products = await prisma.product.findMany({
+      where: { farmerId },
+      include: {
+        reviews: true,
+      },
+    });
+
+    return {
+      products,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      products: [],
+      error: "Something went wrong",
+    };
+  }
+};
+
+export const addProduct = async (productData: Product) => {
+  try {
+    const { id, ...data } = productData;
+
+    if (id) {
+      await prisma.product.update({
+        where: { id },
+        data,
+      });
+    } else {
+      await prisma.product.create({
+        data: productData,
+      });
+    }
+
+    revalidatePath("/farmer-portal/products");
+    return {
+      success: true,
+      error: null,
+    };
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+};
+
+export const deleteProduct = async (productId: string) => {
+  try {
+    await prisma.product.delete({
+      where: { id: productId },
+    });
+
+    revalidatePath("/farmer-portal/products");
+    return {
+      success: true,
+      error: null,
+    };
+  } catch (error: any) {
+    console.log(error);
     return {
       success: false,
       error: error.message,

@@ -31,7 +31,7 @@ const StatisticsCards = ({ stats }: StatisticsCardsProps) => {
             {item.title === "Rating" ? (
               <div className="flex items-center gap-1">
                 <AiFillStar color="gold" size={24} />
-                {item.value}
+                {item.value || "N/A"}
               </div>
             ) : (
               item.value
