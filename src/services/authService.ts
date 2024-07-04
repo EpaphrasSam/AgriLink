@@ -7,7 +7,8 @@ import { AuthError } from "next-auth";
 export const loginAction = async (
   username: string,
   password: string,
-  loginType: Role
+  loginType: Role,
+  logInUser?: boolean
 ) => {
   try {
     const signInOptions: Record<string, any> = {
@@ -16,6 +17,10 @@ export const loginAction = async (
       loginType,
       redirect: false,
     };
+
+    if (typeof logInUser === "boolean") {
+      signInOptions.logInUser = logInUser;
+    }
 
     await signIn("credentials", signInOptions);
     return { success: true };

@@ -2,6 +2,7 @@ import prisma from "@/utils/prisma";
 import { Prisma, Role } from "@prisma/client";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import { signIn } from "@/utils/auth/auth";
 
 export async function POST(req: Request) {
   try {
@@ -13,6 +14,7 @@ export async function POST(req: Request) {
       password,
       role,
       bio,
+      about,
       region,
       town,
       image,
@@ -68,6 +70,7 @@ export async function POST(req: Request) {
         data: {
           userId: user.id,
           bio,
+          about,
           region,
           town,
           image,
@@ -75,8 +78,17 @@ export async function POST(req: Request) {
       });
     }
 
+    await signIn("credentials", {
+      username: user.username,
+      password: password,
+      loginType: user.role,
+      logInUser: true,
+      redirect: false,
+    });
+
     return NextResponse.json({ message: "Signup successful" }, { status: 200 });
   } catch (error: any) {
+    console.log(error);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       switch (error.code) {
         case "P2002":

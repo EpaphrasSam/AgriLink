@@ -7,7 +7,8 @@ import { Role } from "@prisma/client";
 async function validateUser(
   username: string,
   password: string,
-  loginType: Role
+  loginType: Role,
+  logInUser: boolean
 ): Promise<any | null> {
   const user = await prisma.user.findUnique({
     where: {
@@ -34,11 +35,11 @@ async function validateUser(
     throw new Error("No Farmer Account found");
   }
 
-  console.log("role", loginType);
-
-  const isCorrectPassword = await passwordValidator(password, user.password);
-  if (!isCorrectPassword) {
-    throw new Error("Invalid credentials");
+  if (!logInUser) {
+    const isCorrectPassword = await passwordValidator(password, user.password);
+    if (!isCorrectPassword) {
+      throw new Error("Invalid credentials");
+    }
   }
 
   return user;
@@ -54,6 +55,8 @@ export default {
         loginType: { label: "Login Type", type: "text" },
       },
       async authorize(credentials, req): Promise<any | null> {
+        const body = await req.json();
+        const { logInUser } = body;
         if (
           !credentials ||
           typeof credentials.username !== "string" ||
@@ -66,7 +69,8 @@ export default {
           const user = await validateUser(
             credentials.username,
             credentials.password,
-            credentials.loginType as Role
+            credentials.loginType as Role,
+            logInUser
           );
           if (!user) {
             throw new Error("Invalid credentials");

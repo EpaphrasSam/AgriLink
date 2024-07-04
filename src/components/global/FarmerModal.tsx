@@ -24,10 +24,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Role } from "@prisma/client";
 import { useState } from "react";
+import { CldUploadButton } from "next-cloudinary";
 
 export type ModalFormData = {
   town: string;
-  biography: string;
+  bio: string;
   about: string;
   region: string;
   image: string;
@@ -35,7 +36,7 @@ export type ModalFormData = {
 
 export const ModalSchema: ZodType<ModalFormData> = z.object({
   town: z.string().min(2, { message: "Town is too short" }),
-  biography: z.string().min(10, { message: "Biography is too short" }),
+  bio: z.string().min(10, { message: "Biography is too short" }),
   about: z.string().min(10, { message: "About is too short" }),
   region: z.string().nonempty({ message: "Region is required" }),
   image: z.string().min(1, {
@@ -63,6 +64,7 @@ const FarmerModal = ({
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm<ModalFormData>({
     resolver: zodResolver(ModalSchema),
   });
@@ -85,6 +87,7 @@ const FarmerModal = ({
       if (response.status === 200) {
         toast.success("Farmer profile created successfully");
         onClose();
+        window.location.href = "/";
       } else {
         toast.error("Failed to create farmer profile");
       }
@@ -92,6 +95,14 @@ const FarmerModal = ({
       toast.error("Failed to create farmer profile");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleUpload = async (result: any) => {
+    try {
+      setValue("image", result.info.secure_url);
+    } catch (error) {
+      toast.error("Failed to upload image");
     }
   };
 
@@ -113,31 +124,30 @@ const FarmerModal = ({
                   alt="Profile"
                   className="mb-2 w-32 h-32 object-cover rounded-full"
                 />
-                <label
-                  htmlFor="profilePictureUpload"
+                <CldUploadButton
+                  options={{ maxFiles: 1 }}
+                  onSuccess={handleUpload}
+                  uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME}
                   className="absolute bottom-0 right-0"
                 >
                   <FaCamera className="text-xl cursor-pointer hover:opacity-75" />
-                </label>
-                <input
-                  id="profilePictureUpload"
-                  type="file"
-                  accept="image/*"
-                  {...register("image")}
-                  className="hidden"
-                />
+                </CldUploadButton>
               </div>
+
+              {errors.image && (
+                <p className="text-red-500 text-sm">{errors.image.message}</p>
+              )}
             </div>
 
             <Input
               type="text"
-              placeholder="Enter your Biography"
-              label="Biography"
+              placeholder="Enter your Bio"
+              label="Bio"
               radius="sm"
               labelPlacement="outside"
-              {...register("biography")}
-              isInvalid={!!errors.biography}
-              errorMessage={errors.biography?.message}
+              {...register("bio")}
+              isInvalid={!!errors.bio}
+              errorMessage={errors.bio?.message}
             />
             <Textarea
               placeholder="Enter about your farm"

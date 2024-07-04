@@ -65,6 +65,7 @@ const Signup = () => {
         });
         if (response.status === 200) {
           toast.success("Consumer signup successful");
+          window.location.href = "/";
         } else {
           toast.error("Consumer signup failed");
         }
@@ -172,7 +173,6 @@ const Signup = () => {
               color="primary"
               type="submit"
               fullWidth
-              isLoading={signupType === "FARMER" && isLoading}
               onClick={() => setSignupType("FARMER")}
             >
               Signup as Farmer
