@@ -177,7 +177,7 @@ const NavBar = () => {
                   key="Chat"
                   variant="shadow"
                   color="primary"
-                  onClick={() => router.push("/chats")}
+                  onClick={() => router.push("/my-chats")}
                 >
                   My Chats
                 </DropdownItem>

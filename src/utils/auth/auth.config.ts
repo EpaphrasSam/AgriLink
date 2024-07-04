@@ -18,6 +18,7 @@ async function validateUser(
       farmer: {
         select: {
           id: true,
+          name: true,
           bio: true,
           region: true,
           town: true,

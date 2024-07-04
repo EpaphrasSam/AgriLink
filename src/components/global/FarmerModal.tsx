@@ -27,6 +27,7 @@ import { useState } from "react";
 import { CldUploadButton } from "next-cloudinary";
 
 export type ModalFormData = {
+  name: string;
   town: string;
   bio: string;
   about: string;
@@ -35,6 +36,7 @@ export type ModalFormData = {
 };
 
 export const ModalSchema: ZodType<ModalFormData> = z.object({
+  name: z.string().min(2, { message: "Name is too short" }),
   town: z.string().min(2, { message: "Town is too short" }),
   bio: z.string().min(10, { message: "Biography is too short" }),
   about: z.string().min(10, { message: "About is too short" }),
@@ -87,7 +89,7 @@ const FarmerModal = ({
       if (response.status === 200) {
         toast.success("Farmer profile created successfully");
         onClose();
-        window.location.href = "/";
+        window.location.href = "/farmer-portal";
       } else {
         toast.error("Failed to create farmer profile");
       }
@@ -138,6 +140,16 @@ const FarmerModal = ({
                 <p className="text-red-500 text-sm">{errors.image.message}</p>
               )}
             </div>
+
+            <Input
+              placeholder="Enter your name"
+              label="Name"
+              radius="sm"
+              labelPlacement="outside"
+              {...register("name")}
+              isInvalid={!!errors.name}
+              errorMessage={errors.name?.message}
+            />
 
             <Input
               type="text"

@@ -1,3 +1,4 @@
+import { Role } from "@prisma/client";
 import "next-auth";
 
 declare module "next-auth" {
@@ -7,9 +8,10 @@ declare module "next-auth" {
       email: string;
       image?: string | null;
       username?: string | null;
-      role?: string | null;
+      role: Role;
       farmerDetails?: {
         id: string;
+        name: string;
         bio: string;
         region: string;
         town: string;

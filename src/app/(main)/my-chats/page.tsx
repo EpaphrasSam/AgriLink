@@ -1,6 +1,6 @@
 import ConversationListing from "@/components/pages/chat/conversation/ConversationListing";
 
-export default function Chats() {
+export default function MyChats() {
   return (
     <div className="p-6">
       <ConversationListing />

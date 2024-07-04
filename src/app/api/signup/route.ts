@@ -13,6 +13,7 @@ export async function POST(req: Request) {
       username,
       password,
       role,
+      name,
       bio,
       about,
       region,
@@ -69,6 +70,7 @@ export async function POST(req: Request) {
       await prisma.farmer.create({
         data: {
           userId: user.id,
+          name,
           bio,
           about,
           region,

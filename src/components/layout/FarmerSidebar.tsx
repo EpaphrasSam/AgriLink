@@ -5,11 +5,13 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useMediaQuery } from "react-responsive";
-import { Card, Avatar, Divider } from "@nextui-org/react";
+import { Card, Avatar, Divider, Skeleton } from "@nextui-org/react";
 import { farmerNavigationLinks } from "@/lib/routes";
+import { useSession } from "next-auth/react";
 
 const FarmerSideBar = () => {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const pathname = usePathname();
   const isMdOrAbove = useMediaQuery({ query: "(min-width: 1024px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -39,13 +41,32 @@ const FarmerSideBar = () => {
       {!isMobile && (
         <>
           <div className="flex flex-col items-center gap-2 pt-6">
-            <Avatar size="lg" />
+            {status === "loading" ? (
+              <Skeleton className="w-16 h-16 rounded-full" />
+            ) : (
+              <Avatar
+                size="lg"
+                src={session?.user.farmerDetails?.image || ""}
+              />
+            )}
             {isExpanded && (
               <>
-                <span className="text-lg font-semibold">Acqua Farmer</span>
-                <span className="text-gray-600 text-sm font-medium">
-                  Accra, Greater Accra
-                </span>
+                {status === "loading" ? (
+                  <>
+                    <Skeleton className="w-24 h-6 rounded" />
+                    <Skeleton className="w-32 h-4 rounded" />
+                  </>
+                ) : (
+                  <>
+                    <span className="text-lg font-semibold">
+                      {session?.user.farmerDetails?.name}
+                    </span>
+                    <span className="text-gray-600 text-sm font-medium">
+                      {session?.user.farmerDetails?.region},{" "}
+                      {session?.user.farmerDetails?.town}
+                    </span>
+                  </>
+                )}
               </>
             )}
           </div>
