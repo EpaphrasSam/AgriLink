@@ -1,6 +1,7 @@
 import StatisticsCards from "@/components/pages/farmer-portal/dashboard/StatisticsCards";
 import OrdersTable from "@/components/pages/farmer-portal/orders/OrdersTable";
 import { getFarmerOrders, getFarmerStats } from "@/services/farmportalService";
+import { auth } from "@/utils/auth/auth";
 import { Divider } from "@nextui-org/react";
 
 const orders: any[] = [
@@ -247,8 +248,12 @@ const orders: any[] = [
 ];
 
 export default async function FarmerDashboard() {
-  const { stats, error: statsError } = await getFarmerStats();
-  const { orders, error: ordersError } = await getFarmerOrders(true);
+  const session = await auth();
+  const { stats, error: statsError } = await getFarmerStats(session?.user?.id!);
+  const { orders, error: ordersError } = await getFarmerOrders(
+    session?.user?.id!,
+    true
+  );
   return (
     <div className="sm:p-6 p-3">
       <p className="text-2xl font-bold">Dashboard</p>

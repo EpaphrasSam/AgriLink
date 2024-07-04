@@ -1,9 +1,11 @@
 import OrdersTable from "@/components/pages/farmer-portal/orders/OrdersTable";
 import { getFarmerOrders } from "@/services/farmportalService";
+import { auth } from "@/utils/auth/auth";
 import { Divider } from "@nextui-org/react";
 
 export default async function OrdersPage() {
-  const { orders, error } = await getFarmerOrders();
+  const session = await auth();
+  const { orders, error } = await getFarmerOrders(session?.user?.id!);
   return (
     <div className="sm:p-6 p-3">
       <div className="flex items-center gap-2 text-2xl font-bold">

@@ -20,6 +20,7 @@ model User {
   forumPosts  ForumPost[]
   messages    Message[]
   orders      Order[]
+  farmerOrders Order[] @relation("FarmerOrders")
 }
 
 model Farmer {
@@ -62,6 +63,8 @@ model Order {
   product     Product  @relation(fields: [productId], references: [id])
   productId   String   @db.ObjectId
   status      String
+  farmer      User     @relation("FarmerOrders", fields: [farmerId], references: [id])
+  farmerId    String   @db.ObjectId
 }
 
 model Review {

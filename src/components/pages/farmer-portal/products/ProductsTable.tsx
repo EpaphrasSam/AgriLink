@@ -33,7 +33,7 @@ interface ProductsTableProps {
 
 const ProductsTable = ({ products }: ProductsTableProps) => {
   const { data: session } = useSession();
-  const farmerId = session?.user?.id;
+  const farmerId = session?.user?.farmerDetails?.id;
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);

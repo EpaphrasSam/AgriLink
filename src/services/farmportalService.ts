@@ -5,7 +5,7 @@ import prisma from "@/utils/prisma";
 import { Product } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-export const getFarmerStats = async () => {
+export const getFarmerStats = async (userId: string) => {
   try {
     const result = await prisma.$transaction([
       prisma.order.aggregate({
@@ -46,9 +46,15 @@ export const getFarmerStats = async () => {
   }
 };
 
-export const getFarmerOrders = async (isRecent: boolean = false) => {
+export const getFarmerOrders = async (
+  farmerId: string,
+  isRecent: boolean = false
+) => {
   try {
     const orders = await prisma.order.findMany({
+      where: {
+        farmerId,
+      },
       take: isRecent ? 10 : undefined,
       include: {
         user: true,
@@ -151,7 +157,7 @@ export const getFarmerProducts = async (farmerId: string) => {
 
 export const addProduct = async (productData: Product) => {
   try {
-    const { id, ...data } = productData;
+    const { id, farmerId, ...data } = productData;
 
     if (id) {
       await prisma.product.update({
@@ -160,7 +166,14 @@ export const addProduct = async (productData: Product) => {
       });
     } else {
       await prisma.product.create({
-        data: productData,
+        data: {
+          ...data,
+          farmer: {
+            connect: {
+              id: farmerId,
+            },
+          },
+        },
       });
     }
 

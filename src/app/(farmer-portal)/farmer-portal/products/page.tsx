@@ -5,7 +5,7 @@ import { auth } from "@/utils/auth/auth";
 
 export default async function FarmersProductsPage() {
   const session = await auth();
-  const farmerId = session?.user?.id;
+  const farmerId = session?.user?.farmerDetails?.id;
 
   const { products, error } = await getFarmerProducts(farmerId!);
 
