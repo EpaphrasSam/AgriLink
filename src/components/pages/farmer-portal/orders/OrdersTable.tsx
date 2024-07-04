@@ -26,27 +26,11 @@ import { FaShippingFast, FaBan, FaCheck, FaEllipsisV } from "react-icons/fa";
 import CustomModal from "@/components/global/CustomModal";
 import toast from "react-hot-toast";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { FarmerOrders } from "@/types/OrdersTypes";
+import { updateOrderStatus } from "@/services/farmportalService";
 
 interface OrdersTableProps {
-  orders: {
-    id: string;
-    orderID: string;
-    createdAt: string;
-    amount: number;
-    userName: string;
-    userEmail: string;
-    contact: string;
-    shippingAddress: string;
-    shippingStatus: string;
-    products: {
-      id: string;
-      name: string;
-      price: number;
-      slug: string;
-      images: string[];
-      quantity: number;
-    }[];
-  }[];
+  orders: FarmerOrders[];
   isRecentOnly: boolean;
 }
 
@@ -146,7 +130,22 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
 
   const handleConfirm = async () => {
     if (!selectedStatus) return;
-    console.log(selectedStatus);
+    setIsLoading(true);
+    try {
+      const response = await updateOrderStatus(
+        selectedStatus.id,
+        selectedStatus.action
+      );
+      if (response.error) throw new Error(response.error);
+      toast.success("Status updated successfully");
+    } catch (error: any) {
+      const errorMessage = error.message || "Error in updating status";
+      toast.error(errorMessage > 20 ? "Something went wrong" : errorMessage);
+    } finally {
+      setIsLoading(false);
+      setIsModalOpen(false);
+      setSelectedStatus(null);
+    }
   };
 
   const handleClose = () => {
@@ -318,7 +317,7 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
               <TableBody emptyContent={"No orders available."}>{[]}</TableBody>
             ) : (
               <TableBody items={items} aria-colspan={3}>
-                {(item: any) => (
+                {(item: FarmerOrders) => (
                   <TableRow key={item.id}>
                     <TableCell>#{item.orderID}</TableCell>
                     <TableCell>
@@ -335,7 +334,10 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
                     </TableCell>
 
                     <TableCell>
-                      <OrderAccordion data={item.products} type="Products" />
+                      <OrderAccordion
+                        data={[item.quantity, ...item.products]}
+                        type="Products"
+                      />
                     </TableCell>
                     <TableCell>{item.shippingAddress}</TableCell>
                     <TableCell>GHS{item.amount}</TableCell>

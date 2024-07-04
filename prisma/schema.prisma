@@ -43,6 +43,7 @@ model Product {
   category    String
   rating      Float
   images      String[]
+  slug        String
   farmer      Farmer         @relation(fields: [farmerId], references: [id])
   farmerId    String         @db.ObjectId
   reviews     Review[]
@@ -56,6 +57,7 @@ model Order {
   amount      Float
   address     String
   contact     String
+  quantity    Int
   user        User     @relation(fields: [userId], references: [id])
   userId      String   @db.ObjectId
   product     Product  @relation(fields: [productId], references: [id])

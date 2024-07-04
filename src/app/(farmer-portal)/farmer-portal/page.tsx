@@ -1,13 +1,7 @@
 import StatisticsCards from "@/components/pages/farmer-portal/dashboard/StatisticsCards";
 import OrdersTable from "@/components/pages/farmer-portal/orders/OrdersTable";
+import { getFarmerOrders, getFarmerStats } from "@/services/farmportalService";
 import { Divider } from "@nextui-org/react";
-
-const stats = {
-  totalSales: 500,
-  orders: 123,
-  products: 45,
-  ratings: 4.5,
-};
 
 const orders: any[] = [
   {
@@ -252,7 +246,9 @@ const orders: any[] = [
   },
 ];
 
-export default function FarmerDashboard() {
+export default async function FarmerDashboard() {
+  const { stats, error: statsError } = await getFarmerStats();
+  const { orders, error: ordersError } = await getFarmerOrders(true);
   return (
     <div className="sm:p-6 p-3">
       <p className="text-2xl font-bold">Dashboard</p>
