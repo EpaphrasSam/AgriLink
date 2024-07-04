@@ -16,72 +16,18 @@ import { MdStarRate } from "react-icons/md";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { IoChevronDown } from "react-icons/io5";
 import Link from "next/link";
+import { Farmer, Review } from "@prisma/client";
+import { regions } from "@/lib/constants";
 
-const farmers = [
-  {
-    id: 1,
-    name: "John Doe",
-    bio: "Experienced farmer specializing in organic vegetables.",
-    image:
-      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
-    town: "Accra",
-    region: "Greater Accra",
-    rating: 4.5,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    bio: "Passionate about sustainable farming and eco-friendly practices.",
-    image:
-      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
-    town: "Kumasi",
-    region: "Ashanti",
-    rating: 4.8,
-  },
-  {
-    id: 3,
-    name: "Carlos Rodriguez",
-    bio: "Third-generation farmer with a focus on high-quality dairy products.",
-    image:
-      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
-    town: "Tamale",
-    region: "Northern",
-    rating: 4.7,
-  },
-  {
-    id: 4,
-    name: "Amina Khan",
-    bio: "Innovative farmer growing exotic fruits and herbs.",
-    image:
-      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
-    town: "Takoradi",
-    region: "Western",
-    rating: 4.9,
-  },
-  {
-    id: 5,
-    name: "Liam O'Connor",
-    bio: "Specializes in free-range poultry and eggs.",
-    image:
-      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGFncmljdWx0dXJlfGVufDB8fHx8MTYzMjY0NzY0NQ&ixlib=rb-1.2.1&q=80&w=1080",
-    town: "Cape Coast",
-    region: "Central",
-    rating: 4.6,
-  },
-];
+interface FarmerWithReviews extends Farmer {
+  reviews: Review[];
+}
 
-const getUniqueRegions = (farmers: any) => {
-  const regions = farmers.map((farmer: any) => farmer.region);
-  return Array.from(new Set(regions));
-};
-
-const FarmersListing = () => {
+const FarmersListing = ({ farmers }: { farmers: FarmerWithReviews[] }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegions, setSelectedRegions] = useState([]);
   const [selectedRating, setSelectedRating] = useState([]);
   const [sortOption, setSortOption] = useState([]);
-
-  const uniqueRegions = getUniqueRegions(farmers);
 
   const filteredFarmers = useMemo(() => {
     let filtered = farmers;
@@ -102,7 +48,10 @@ const FarmersListing = () => {
 
     if (rating) {
       filtered = filtered.filter(
-        (farmer) => farmer.rating >= parseFloat(rating)
+        (farmer) =>
+          farmer.reviews.reduce((sum, review) => sum + review.rating, 0) /
+            farmer.reviews.length >=
+          parseFloat(rating)
       );
     }
 
@@ -114,10 +63,22 @@ const FarmersListing = () => {
         filtered = filtered.sort((a, b) => b.name.localeCompare(a.name));
         break;
       case "high-low":
-        filtered = filtered.sort((a, b) => b.rating - a.rating);
+        filtered = filtered.sort(
+          (a, b) =>
+            b.reviews.reduce((sum, review) => sum + review.rating, 0) /
+              b.reviews.length -
+            a.reviews.reduce((sum, review) => sum + review.rating, 0) /
+              a.reviews.length
+        );
         break;
       case "low-high":
-        filtered = filtered.sort((a, b) => a.rating - b.rating);
+        filtered = filtered.sort(
+          (a, b) =>
+            a.reviews.reduce((sum, review) => sum + review.rating, 0) /
+              a.reviews.length -
+            b.reviews.reduce((sum, review) => sum + review.rating, 0) /
+              b.reviews.length
+        );
         break;
       default:
         break;
@@ -177,7 +138,7 @@ const FarmersListing = () => {
               onSelectionChange={(keys: any) => setSelectedRegions(keys)}
               selectionMode="multiple"
             >
-              {uniqueRegions.map((region: any) => (
+              {regions.map((region) => (
                 <DropdownItem key={region}>{region}</DropdownItem>
               ))}
             </DropdownMenu>
@@ -246,12 +207,17 @@ const FarmersListing = () => {
                       </p>
                       <p className="flex items-start gap-2">
                         <MdStarRate color="gold" size={20} />
-                        <p className="text-sm text-gray-500">{farmer.rating}</p>
+                        <p className="text-sm text-gray-500">
+                          {farmer.reviews.reduce(
+                            (sum, review) => sum + review.rating,
+                            0
+                          ) / farmer.reviews.length || "N/A"}
+                        </p>
                       </p>
                     </div>
                   </div>
                   <Button variant="ghost" color="primary">
-                    <Link href={`/farmers/${farmer.id}`}>View Profile</Link>
+                    <Link href={`/farmers/${farmer.slug}`}>View Profile</Link>
                   </Button>
                 </div>
                 <Divider className="my-4" />

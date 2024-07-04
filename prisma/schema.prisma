@@ -20,6 +20,7 @@ model User {
   forumPosts  ForumPost[]
   messages    Message[]
   orders      Order[]
+  createdAt   DateTime @default(now())
 }
 
 model Farmer {
@@ -32,10 +33,12 @@ model Farmer {
   region              String
   town                String
   image               String
+  slug                String        @unique
   products            Product[]
   reviews             Review[]
   orders              Order[] @relation("FarmerOrders")
   paystackAccountId   String?
+  createdAt           DateTime @default(now())
 }
 
 model Product {
@@ -50,6 +53,7 @@ model Product {
   farmerId    String         @db.ObjectId
   reviews     Review[]
   orders      Order[]
+  createdAt   DateTime @default(now())
 }
 
 model Order {
@@ -82,6 +86,7 @@ model Review {
   replies        Review[]     @relation("ReviewReplies")
   parentReview   Review?      @relation("ReviewReplies", fields: [parentReviewId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   parentReviewId String?      @db.ObjectId
+  createdAt   DateTime @default(now())
 }
 
 model Message {
@@ -91,6 +96,7 @@ model Message {
   senderId    String         @db.ObjectId
   conversation Conversation  @relation(fields: [conversationId], references: [id])
   conversationId String      @db.ObjectId
+  createdAt   DateTime @default(now())
 }
 
 model Conversation {
@@ -100,6 +106,7 @@ model Conversation {
   user1Id       String         @db.ObjectId
   user2         User           @relation("User2Conversations", fields: [user2Id], references: [id])
   user2Id       String         @db.ObjectId
+  createdAt   DateTime @default(now())
 }
 
 model Forum {
@@ -107,6 +114,7 @@ model Forum {
   title       String
   description String
   posts       ForumPost[]
+  createdAt   DateTime @default(now())
 }
 
 model ForumPost {
@@ -119,6 +127,7 @@ model ForumPost {
   replies     ForumPost[]  @relation("ForumPostReplies")
   parentPost  ForumPost?   @relation("ForumPostReplies", fields: [parentPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   parentPostId String?     @db.ObjectId
+  createdAt   DateTime @default(now())
 }
 
 enum Role {

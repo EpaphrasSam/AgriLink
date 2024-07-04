@@ -1,42 +1,55 @@
-import React, { useEffect } from "react";
+import React, { ChangeEvent } from "react";
 import { Button, Divider, Slider, Input } from "@nextui-org/react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
+
+interface Filters {
+  categories: string[];
+  priceRange: [number, number];
+  ratings: number[];
+  searchQuery: string;
+}
+
+interface ProductFiltersProps {
+  filters: Filters;
+  setFilters: (filters: Filters | ((prev: Filters) => Filters)) => void;
+  uniqueCategories: string[];
+  priceRange: [number, number];
+}
 
 const ProductFilters = ({
   filters,
   setFilters,
   uniqueCategories,
   priceRange,
-}: any) => {
-  const handleCategoryChange = (category: any) => {
-    setFilters((prev: any) => ({
+}: ProductFiltersProps) => {
+  const handleCategoryChange = (category: string) => {
+    setFilters((prev: Filters) => ({
       ...prev,
       categories: prev.categories.includes(category)
-        ? prev.categories.filter((c: any) => c !== category)
+        ? prev.categories.filter((c: string) => c !== category)
         : [...prev.categories, category],
     }));
   };
 
-  const handleRatingChange = (rating: any) => {
-    const currentRating = filters.ratings[0];
-    if (rating === 1 && currentRating === 1) return;
-
-    setFilters((prev: any) => ({
+  const handleRatingChange = (rating: number) => {
+    setFilters((prev: Filters) => ({
       ...prev,
-      ratings: [rating],
+      ratings: prev.ratings[0] === rating ? [] : [rating],
     }));
   };
 
-  const handlePriceChange = (value: any) => {
-    setFilters((prev: any) => ({
-      ...prev,
-      priceRange: value,
-    }));
+  const handlePriceChange = (value: number | number[]) => {
+    if (Array.isArray(value) && value.length === 2) {
+      setFilters((prev: Filters) => ({
+        ...prev,
+        priceRange: [value[0], value[1]] as [number, number],
+      }));
+    }
   };
 
-  const handleSearchChange = (event: any) => {
-    setFilters((prev: any) => ({
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFilters((prev: Filters) => ({
       ...prev,
       searchQuery: event.target.value,
     }));
@@ -97,6 +110,10 @@ const ProductFilters = ({
               formatOptions={{ style: "currency", currency: "GHS" }}
               value={[filters.priceRange[0], filters.priceRange[1]]}
               onChange={handlePriceChange}
+              isDisabled={
+                filters.priceRange[0] === priceRange[0] &&
+                filters.priceRange[1] === priceRange[1]
+              }
               classNames={{
                 label: "text-lg font-semibold mb-2",
                 value: "text-xs font-semibold mb-2",

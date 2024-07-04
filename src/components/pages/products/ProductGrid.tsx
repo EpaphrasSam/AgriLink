@@ -1,9 +1,9 @@
 import ProductCard from "@/components/global/ProductCard";
-import { Product } from "@/types/ProductTypes";
 import React from "react";
+import { ProductWithReviews } from "@/types/ProductTypes";
 
 interface ProductGridProps {
-  products: Product[];
+  products: ProductWithReviews[];
 }
 
 const ProductGrid = ({ products }: ProductGridProps) => {

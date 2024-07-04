@@ -1,24 +1,24 @@
+import { ProductWithReviews } from "@/types/ProductTypes";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { Product } from "@/types/ProductTypes";
 
-type CartProduct = Product & { quantity: number };
+type CartProduct = ProductWithReviews & { quantity: number };
 
 interface CartState {
   cart: Record<string, CartProduct[]>;
-  addToCart: (product: Product) => void;
-  removeProduct: (productId: number, farm: string) => void;
-  increaseQuantity: (productId: number, farm: string) => void;
-  decreaseQuantity: (productId: number, farm: string) => void;
+  addToCart: (product: ProductWithReviews) => void;
+  removeProduct: (productId: string, farm: string) => void;
+  increaseQuantity: (productId: string, farm: string) => void;
+  decreaseQuantity: (productId: string, farm: string) => void;
   clearCart: () => void;
 }
 
 interface CartState {
   cart: Record<string, CartProduct[]>;
-  addToCart: (product: Product) => void;
-  removeProduct: (productId: number, farm: string) => void;
-  increaseQuantity: (productId: number, farm: string) => void;
-  decreaseQuantity: (productId: number, farm: string) => void;
+  addToCart: (product: ProductWithReviews) => void;
+  removeProduct: (productId: string, farm: string) => void;
+  increaseQuantity: (productId: string, farm: string) => void;
+  decreaseQuantity: (productId: string, farm: string) => void;
   clearCart: () => void;
   calculateSubtotal: (farm: string) => number;
   calculateTotal: () => number;
@@ -28,9 +28,9 @@ const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       cart: {},
-      addToCart: (product: Product) => {
+      addToCart: (product: ProductWithReviews) => {
         set((state) => {
-          const farmProducts = state.cart[product.farm] || [];
+          const farmProducts = state.cart[product.farmer.name] || [];
           const existingProduct = farmProducts.find((p) => p.id === product.id);
 
           if (existingProduct) {
@@ -39,10 +39,12 @@ const useCartStore = create<CartState>()(
             farmProducts.push({ ...product, quantity: 1 });
           }
 
-          return { cart: { ...state.cart, [product.farm]: farmProducts } };
+          return {
+            cart: { ...state.cart, [product.farmer.name]: farmProducts },
+          };
         });
       },
-      removeProduct: (productId: number, farm: string) => {
+      removeProduct: (productId: string, farm: string) => {
         set((state) => {
           const farmProducts = state.cart[farm].filter(
             (p) => p.id !== productId
@@ -52,7 +54,7 @@ const useCartStore = create<CartState>()(
           return { cart: newCart };
         });
       },
-      increaseQuantity: (productId: number, farm: string) => {
+      increaseQuantity: (productId: string, farm: string) => {
         set((state) => {
           const farmProducts = state.cart[farm].map((p) =>
             p.id === productId ? { ...p, quantity: p.quantity + 1 } : p
@@ -60,7 +62,7 @@ const useCartStore = create<CartState>()(
           return { cart: { ...state.cart, [farm]: farmProducts } };
         });
       },
-      decreaseQuantity: (productId: number, farm: string) => {
+      decreaseQuantity: (productId: string, farm: string) => {
         set((state) => {
           const farmProducts = state.cart[farm]
             .map((p) =>

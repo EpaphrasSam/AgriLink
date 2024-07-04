@@ -230,7 +230,6 @@ export const updateFarmerDetails = async (
   details: Partial<Farmer>
 ) => {
   try {
-    console.log(details);
     await prisma.farmer.update({
       where: { id: farmerId },
       data: details,

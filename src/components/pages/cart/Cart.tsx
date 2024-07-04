@@ -80,8 +80,8 @@ const Cart = () => {
                       <CardBody className="p-0">
                         <Link href={`/products/${product.id}`}>
                           <Image
-                            src={product.image}
-                            alt={product.title}
+                            src={product.images[0]}
+                            alt={product.name}
                             className="w-64 h-32 object-cover mb-2"
                             radius="none"
                             isZoomed
@@ -90,7 +90,7 @@ const Cart = () => {
                       </CardBody>
                       <CardFooter className="flex flex-col gap-2">
                         <h3 className="text-lg font-semibold">
-                          {product.title}
+                          {product.name}
                         </h3>
                         <p className="text-gray-600">
                           GHS {(product.price * product.quantity).toFixed(2)}

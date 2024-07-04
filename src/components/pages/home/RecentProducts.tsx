@@ -7,9 +7,9 @@ import {
   CustomRightArrow,
 } from "@/components/global/CustomArrows";
 import Carousel from "react-multi-carousel";
+import { Product, Review } from "@prisma/client";
 import ProductCard from "@/components/global/ProductCard";
 import { ProductWithReviews } from "@/types/ProductTypes";
-import { Review } from "@prisma/client";
 
 const responsive = {
   LargeDesktop: {
@@ -34,11 +34,11 @@ const responsive = {
   },
 };
 
-interface PopularProductsProps {
+interface RecentProductsProps {
   products: ProductWithReviews[];
 }
 
-const PopularProducts = ({ products }: PopularProductsProps) => {
+const RecentProducts = ({ products }: RecentProductsProps) => {
   return (
     <div className="w-full py-4">
       <Carousel
@@ -56,4 +56,4 @@ const PopularProducts = ({ products }: PopularProductsProps) => {
   );
 };
 
-export default PopularProducts;
+export default RecentProducts;

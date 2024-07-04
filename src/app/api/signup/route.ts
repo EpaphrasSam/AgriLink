@@ -3,6 +3,8 @@ import { Prisma, Role } from "@prisma/client";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { signIn } from "@/utils/auth/auth";
+import slugify from "slugify";
+import { generateFarmerSlug } from "@/helpers/generateSlug";
 
 export async function POST(req: Request) {
   try {
@@ -76,6 +78,7 @@ export async function POST(req: Request) {
           region,
           town,
           image,
+          slug: await generateFarmerSlug(name, user.id),
         },
       });
     }

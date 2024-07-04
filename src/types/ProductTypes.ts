@@ -1,15 +1,6 @@
-import { Product as P, Review } from "@prisma/client";
+import { Product, Review, Farmer } from "@prisma/client";
 
-export interface ProductWithReviews extends P {
+export interface ProductWithReviews extends Product {
   reviews: Review[];
+  farmer: Farmer;
 }
-
-export type Product = {
-  id: number;
-  title: string;
-  category: string;
-  price: number;
-  rating: number;
-  image: string;
-  farm: string;
-};

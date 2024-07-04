@@ -145,15 +145,15 @@ const Checkout = () => {
                 <div key={product.id} className="flex items-center space-x-4">
                   <Link href={`/products/${product.id}`}>
                     <Image
-                      src={product.image}
-                      alt={product.title}
+                      src={product.images[0]}
+                      alt={product.name}
                       className="w-16 h-16 object-cover"
                       radius="none"
                       isZoomed
                     />
                   </Link>
                   <div className="flex flex-col">
-                    <h4 className="text-lg font-semibold">{product.title}</h4>
+                    <h4 className="text-lg font-semibold">{product.name}</h4>
                     <p className="text-gray-600">
                       GHS {product.price.toFixed(2)}
                     </p>
