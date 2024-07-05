@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { MdAdd, MdStarRate, MdStarHalf } from "react-icons/md";
+import { MdAdd, MdStarRate, MdStarHalf, MdStarBorder } from "react-icons/md";
 import {
   Button,
   Input,
@@ -234,11 +234,14 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                         }
                       />
                       <div className="ml-4">
-                        <p className="font-bold">
-                          {reply.isFarmer
-                            ? reply?.farmer!.name
-                            : reply.user.username}
-                        </p>
+                        <div className="flex flex-row gap-1 items-center">
+                          <p className="font-bold">
+                            {reply.isFarmer
+                              ? reply?.farmer!.name
+                              : reply.user.username}
+                          </p>
+                          {reply.isFarmer && <MdStarBorder color="gray" />}
+                        </div>
                         <p className="text-gray-500 text-sm">
                           {reply.createdAt.toLocaleDateString()}
                         </p>

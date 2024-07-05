@@ -249,3 +249,74 @@ export const updateFarmerDetails = async (
     };
   }
 };
+
+export const getFarmerAndProductReviews = async (farmerId: string) => {
+  try {
+    const farmer = await prisma.farmer.findUnique({
+      where: { id: farmerId },
+      include: {
+        reviews: {
+          where: {
+            OR: [
+              { parentReviewId: null },
+              { parentReviewId: { isSet: false } },
+            ],
+          },
+          include: {
+            user: true,
+            farmer: true,
+            replies: {
+              include: {
+                user: true,
+                farmer: true,
+                replies: {
+                  include: {
+                    user: true,
+                    farmer: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        products: {
+          include: {
+            reviews: {
+              where: {
+                OR: [
+                  { parentReviewId: null },
+                  { parentReviewId: { isSet: false } },
+                ],
+              },
+              include: {
+                user: true,
+                farmer: true,
+                replies: {
+                  include: {
+                    user: true,
+                    farmer: true,
+                    replies: {
+                      include: {
+                        user: true,
+                        farmer: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            farmer: true,
+          },
+        },
+      },
+    });
+
+    if (!farmer) {
+      return { farmer: null, error: "Farmer not found" };
+    }
+
+    return { farmer, error: null };
+  } catch (error) {
+    return { farmer: null, error: "Something went wrong" };
+  }
+};

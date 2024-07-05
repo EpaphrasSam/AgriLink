@@ -15,11 +15,13 @@ export const addReview = async (
     if (!session) throw new Error("User not authenticated");
 
     const userId = session.user.id;
+    const farmer = session.user.farmerDetails;
 
     const data: any = {
       rating,
       comment,
       userId,
+      isFarmer: !!farmer,
     };
 
     if (productId) data.productId = productId;
@@ -54,11 +56,13 @@ export const replyToReview = async (
     if (!session) throw new Error("User not authenticated");
 
     const userId = session.user.id;
+    const farmer = session.user.farmerDetails;
 
     const data: any = {
       comment: reply,
       userId,
       parentReviewId: reviewId,
+      isFarmer: !!farmer,
     };
 
     if (productId) data.productId = productId;
