@@ -2,6 +2,61 @@
 
 import prisma from "@/utils/prisma";
 
+export const getFarmerBySlug = async (slug: string) => {
+  try {
+    const farmer = await prisma.farmer.findUnique({
+      where: { slug },
+      include: {
+        products: {
+          include: {
+            reviews: {
+              where: {
+                OR: [
+                  { parentReviewId: null },
+                  { parentReviewId: { isSet: false } },
+                ],
+              },
+            },
+            farmer: true,
+          },
+        },
+        reviews: {
+          where: {
+            OR: [
+              { parentReviewId: null },
+              { parentReviewId: { isSet: false } },
+            ],
+          },
+          include: {
+            user: true,
+            farmer: true,
+            replies: {
+              include: {
+                user: true,
+                farmer: true,
+                replies: {
+                  include: {
+                    user: true,
+                    farmer: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!farmer) {
+      return { farmer: null, error: "Farmer not found" };
+    }
+
+    return { farmer, error: null };
+  } catch (error) {
+    return { farmer: null, error: "Something went wrong" };
+  }
+};
+
 export const getTopRatedFarmers = async () => {
   try {
     const farmers = await prisma.farmer.findMany({

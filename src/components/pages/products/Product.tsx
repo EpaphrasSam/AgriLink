@@ -42,7 +42,7 @@ const Product = ({ product }: ProductProps) => {
   const onAddReview = async (rating: number, comment: string) => {
     setIsAddingReview(true);
     try {
-      const result = await addReview(product.id, rating, comment);
+      const result = await addReview(rating, comment, product.id);
       if (result) {
         toast.success("Review added successfully");
       }

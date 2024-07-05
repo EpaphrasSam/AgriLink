@@ -5,9 +5,10 @@ import prisma from "@/utils/prisma";
 import { revalidatePath } from "next/cache";
 
 export const addReview = async (
-  productId: string,
   rating: number,
-  comment: string
+  comment: string,
+  productId?: string,
+  farmerId?: string
 ) => {
   try {
     const session = await auth();
@@ -15,16 +16,26 @@ export const addReview = async (
 
     const userId = session.user.id;
 
+    const data: any = {
+      rating,
+      comment,
+      userId,
+    };
+
+    if (productId) data.productId = productId;
+    if (farmerId) data.farmerId = farmerId;
+
     await prisma.review.create({
-      data: {
-        rating,
-        comment,
-        userId,
-        productId,
-      },
+      data,
     });
-    revalidatePath(`/product/${productId}`);
-    revalidatePath("farmer-portal/products");
+
+    if (productId) {
+      revalidatePath(`/product/${productId}`);
+      revalidatePath("farmer-portal/products");
+    } else if (farmerId) {
+      revalidatePath(`/farmers/${farmerId}`);
+    }
+
     return true;
   } catch (error) {
     console.error("Failed to add review:", error);
@@ -35,7 +46,8 @@ export const addReview = async (
 export const replyToReview = async (
   reviewId: string,
   reply: string,
-  productId: string
+  productId?: string,
+  farmerId?: string
 ) => {
   try {
     const session = await auth();
@@ -43,17 +55,25 @@ export const replyToReview = async (
 
     const userId = session.user.id;
 
+    const data: any = {
+      comment: reply,
+      userId,
+      parentReviewId: reviewId,
+    };
+
+    if (productId) data.productId = productId;
+    if (farmerId) data.farmerId = farmerId;
+
     await prisma.review.create({
-      data: {
-        comment: reply,
-        userId,
-        parentReviewId: reviewId,
-        productId,
-      },
+      data,
     });
 
-    revalidatePath(`/product/${productId}`);
-    revalidatePath("farmer-portal/products");
+    if (productId) {
+      revalidatePath(`/product/${productId}`);
+      revalidatePath("farmer-portal/products");
+    } else if (farmerId) {
+      revalidatePath(`/farmers/${farmerId}`);
+    }
 
     return true;
   } catch (error) {

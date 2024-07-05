@@ -75,7 +75,7 @@ const NavBar = () => {
       setIsLoading(true);
       await logoutAction();
       toast.success("Logout successful");
-      window.location.href = "/";
+      window.location.reload();
     } catch (error) {
       toast.error("Something went wrong");
     } finally {

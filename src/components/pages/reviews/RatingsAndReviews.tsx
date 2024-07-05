@@ -146,14 +146,18 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
             <div key={review.id} className="review mb-4">
               <div className="review-header flex items-center">
                 <Avatar
-                  src={review.farmer ? review.farmer.image : ""}
+                  src={review.isFarmer ? review?.farmer!.image : ""}
                   alt={
-                    review.farmer ? review.farmer.name : review.user.username
+                    review.isFarmer
+                      ? review?.farmer!.name
+                      : review.user.username
                   }
                 />
                 <div className="ml-4">
                   <p className="font-bold">
-                    {review.farmer ? review.farmer.name : review.user.username}
+                    {review.isFarmer
+                      ? review?.farmer!.name
+                      : review.user.username}
                   </p>
                   <p className="text-gray-500 text-sm">
                     {review.createdAt.toLocaleDateString()}
@@ -222,15 +226,17 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                   <div key={reply.id} className="reply mb-2">
                     <div className="flex items-center">
                       <Avatar
-                        src={reply.farmer ? reply.farmer.image : ""}
+                        src={reply.isFarmer ? reply?.farmer!.image : ""}
                         alt={
-                          reply.farmer ? reply.farmer.name : reply.user.username
+                          reply.isFarmer
+                            ? reply?.farmer!.name
+                            : reply.user.username
                         }
                       />
                       <div className="ml-4">
                         <p className="font-bold">
-                          {reply.farmer
-                            ? reply.farmer.name
+                          {reply.isFarmer
+                            ? reply?.farmer!.name
                             : reply.user.username}
                         </p>
                         <p className="text-gray-500 text-sm">
