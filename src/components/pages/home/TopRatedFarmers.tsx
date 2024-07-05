@@ -50,7 +50,7 @@ const TopRatedFarmers = ({ farmers }: TopRatedFarmersProps) => {
       >
         {farmers.map((farmer) => (
           <Link
-            href={`/farmers/${farmer.id}`}
+            href={`/farmers/${farmer.slug}`}
             key={farmer.id}
             className="flex flex-col justify-center m-2 transition-all duration-300 hover:scale-105"
           >
@@ -75,7 +75,7 @@ const TopRatedFarmers = ({ farmers }: TopRatedFarmersProps) => {
                   {farmer.reviews.length > 0
                     ? (
                         farmer.reviews.reduce(
-                          (acc, review) => acc + review.rating,
+                          (acc, review) => acc + review?.rating!,
                           0
                         ) / farmer.reviews.length
                       ).toFixed(1)

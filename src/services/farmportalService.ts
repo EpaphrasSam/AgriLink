@@ -29,6 +29,7 @@ export const getFarmerStats = async (farmerId: string) => {
       prisma.review.aggregate({
         where: {
           farmerId,
+          OR: [{ parentReviewId: null }, { parentReviewId: { isSet: false } }],
         },
         _avg: {
           rating: true,

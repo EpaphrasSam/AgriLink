@@ -18,7 +18,7 @@ const ProductCard = ({ product, showFarmer = true }: CardItemsProps) => {
   const averageRating =
     product.reviews.length > 0
       ? (
-          product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+          product.reviews.reduce((acc, review) => acc + review?.rating!, 0) /
           product.reviews.length
         ).toFixed(1)
       : "N/A";

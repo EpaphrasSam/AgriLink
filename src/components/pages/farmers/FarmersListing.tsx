@@ -49,7 +49,7 @@ const FarmersListing = ({ farmers }: { farmers: FarmerWithReviews[] }) => {
     if (rating) {
       filtered = filtered.filter(
         (farmer) =>
-          farmer.reviews.reduce((sum, review) => sum + review.rating, 0) /
+          farmer.reviews.reduce((sum, review) => sum + review?.rating!, 0) /
             farmer.reviews.length >=
           parseFloat(rating)
       );
@@ -65,18 +65,18 @@ const FarmersListing = ({ farmers }: { farmers: FarmerWithReviews[] }) => {
       case "high-low":
         filtered = filtered.sort(
           (a, b) =>
-            b.reviews.reduce((sum, review) => sum + review.rating, 0) /
+            b.reviews.reduce((sum, review) => sum + review?.rating!, 0) /
               b.reviews.length -
-            a.reviews.reduce((sum, review) => sum + review.rating, 0) /
+            a.reviews.reduce((sum, review) => sum + review?.rating!, 0) /
               a.reviews.length
         );
         break;
       case "low-high":
         filtered = filtered.sort(
           (a, b) =>
-            a.reviews.reduce((sum, review) => sum + review.rating, 0) /
+            a.reviews.reduce((sum, review) => sum + review?.rating!, 0) /
               a.reviews.length -
-            b.reviews.reduce((sum, review) => sum + review.rating, 0) /
+            b.reviews.reduce((sum, review) => sum + review?.rating!, 0) /
               b.reviews.length
         );
         break;
@@ -209,7 +209,7 @@ const FarmersListing = ({ farmers }: { farmers: FarmerWithReviews[] }) => {
                         <MdStarRate color="gold" size={20} />
                         <p className="text-sm text-gray-500">
                           {farmer.reviews.reduce(
-                            (sum, review) => sum + review.rating,
+                            (sum, review) => sum + review?.rating!,
                             0
                           ) / farmer.reviews.length || "N/A"}
                         </p>

@@ -36,7 +36,7 @@ const ProductListing = ({ products }: { products: ProductWithReviews[] }) => {
         product.price <= filters.priceRange[1];
       const matchesRating =
         filters.ratings.length === 0 ||
-        product.reviews.some((review) => review.rating >= filters.ratings[0]);
+        product.reviews.some((review) => review?.rating! >= filters.ratings[0]);
       const matchesSearch =
         filters.searchQuery === "" ||
         product.name.toLowerCase().includes(filters.searchQuery.toLowerCase());

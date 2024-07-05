@@ -2,11 +2,61 @@
 
 import prisma from "@/utils/prisma";
 
+export const getProductBySlug = async (slug: string) => {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { slug },
+      include: {
+        reviews: {
+          where: {
+            OR: [
+              { parentReviewId: null },
+              { parentReviewId: { isSet: false } },
+            ],
+          },
+          include: {
+            user: true,
+            farmer: true,
+            replies: {
+              include: {
+                user: true,
+                farmer: true,
+                replies: {
+                  include: {
+                    user: true,
+                    farmer: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        farmer: true,
+      },
+    });
+
+    if (!product) {
+      return { product: null, error: "Product not found" };
+    }
+
+    return { product, error: null };
+  } catch (error) {
+    return { product: null, error: "Something went wrong" };
+  }
+};
+
 export const getPopularProducts = async () => {
   try {
     const products = await prisma.product.findMany({
       include: {
-        reviews: true,
+        reviews: {
+          where: {
+            OR: [
+              { parentReviewId: null },
+              { parentReviewId: { isSet: false } },
+            ],
+          },
+        },
         farmer: true,
       },
     });
@@ -14,7 +64,7 @@ export const getPopularProducts = async () => {
     const productsWithAvgRating = products.map((product) => {
       const avgRating =
         product.reviews.length > 0
-          ? product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+          ? product.reviews.reduce((acc, review) => acc + review?.rating!, 0) /
             product.reviews.length
           : 0;
       return { ...product, avgRating };
@@ -40,7 +90,14 @@ export const getRecentProducts = async () => {
   try {
     const products = await prisma.product.findMany({
       include: {
-        reviews: true,
+        reviews: {
+          where: {
+            OR: [
+              { parentReviewId: null },
+              { parentReviewId: { isSet: false } },
+            ],
+          },
+        },
         farmer: true,
       },
       orderBy: {
@@ -65,7 +122,14 @@ export const getAllProducts = async () => {
   try {
     const products = await prisma.product.findMany({
       include: {
-        reviews: true,
+        reviews: {
+          where: {
+            OR: [
+              { parentReviewId: null },
+              { parentReviewId: { isSet: false } },
+            ],
+          },
+        },
         farmer: true,
       },
     });

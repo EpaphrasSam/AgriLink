@@ -6,14 +6,21 @@ export const getTopRatedFarmers = async () => {
   try {
     const farmers = await prisma.farmer.findMany({
       include: {
-        reviews: true,
+        reviews: {
+          where: {
+            OR: [
+              { parentReviewId: null },
+              { parentReviewId: { isSet: false } },
+            ],
+          },
+        },
       },
     });
 
     const farmersWithAvgRating = farmers.map((farmer) => {
       const avgRating =
         farmer.reviews.length > 0
-          ? farmer.reviews.reduce((acc, review) => acc + review.rating, 0) /
+          ? farmer.reviews.reduce((acc, review) => acc + review?.rating!, 0) /
             farmer.reviews.length
           : 0;
       return { ...farmer, avgRating };
@@ -39,7 +46,14 @@ export const getAllFarmers = async () => {
   try {
     const farmers = await prisma.farmer.findMany({
       include: {
-        reviews: true,
+        reviews: {
+          where: {
+            OR: [
+              { parentReviewId: null },
+              { parentReviewId: { isSet: false } },
+            ],
+          },
+        },
       },
     });
 

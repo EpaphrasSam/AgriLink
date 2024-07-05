@@ -13,33 +13,19 @@ import {
   ModalHeader,
   Progress,
   Textarea,
+  Avatar,
 } from "@nextui-org/react";
 import Image from "next/image";
-
-interface Review {
-  id: string;
-  user: string;
-  userImage: string;
-  date: string;
-  comment?: string;
-  rating: number;
-  replies: Reply[];
-}
-
-interface Reply {
-  id: string;
-  user: string;
-  userImage: string;
-  date: string;
-  comment: string;
-}
+import { ReviewWithUser } from "@/types/ProductTypes";
 
 interface ReviewsComponentProps {
-  reviews: Review[];
+  reviews: ReviewWithUser[];
   isFarmerPortal: boolean;
   isUserLoggedIn: boolean;
   onReply: (reviewId: string, reply: string) => void;
-  onAddReview: (rating: string, comment: string) => void;
+  onAddReview: (rating: number, comment: string) => void;
+  isReplying: boolean;
+  isAddingReview: boolean;
 }
 
 const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
@@ -48,6 +34,8 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
   isUserLoggedIn,
   onReply,
   onAddReview,
+  isReplying,
+  isAddingReview,
 }) => {
   const [replyText, setReplyText] = useState<string>("");
   const [activeReviewId, setActiveReviewId] = useState<string | null>(null);
@@ -57,14 +45,17 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
 
   const averageRating = useMemo(() => {
     if (reviews.length === 0) return "0.0";
-    const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+    const totalRating = reviews.reduce(
+      (acc, review) => acc + review?.rating!,
+      0
+    );
     return (totalRating / reviews.length).toFixed(1);
   }, [reviews]);
 
   const ratingDistribution = useMemo(() => {
     const distribution = [0, 0, 0, 0, 0];
     reviews.forEach((review) => {
-      distribution[review.rating - 1]++;
+      distribution[review?.rating! - 1]++;
     });
     return distribution.reverse();
   }, [reviews]);
@@ -79,7 +70,7 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
 
   const handleAddReview = () => {
     if (Number(newRating) > 0) {
-      onAddReview(newRating, newComment);
+      onAddReview(Number(newRating), newComment);
       setNewRating("0");
       setNewComment("");
       setIsModalOpen(false);
@@ -114,7 +105,7 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
               <div className="text-4xl text-gray-600 font-bold">
                 {averageRating}
               </div>
-              <div className="stars flex mt-2">
+              <div className="flex mt-2">
                 {[...Array(5)].map((_, i) => {
                   const ratingValue = i + 1;
                   if (ratingValue <= Math.floor(Number(averageRating))) {
@@ -131,7 +122,7 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
               </div>
               <p className="mt-2 text-lg">{reviews.length} reviews</p>
             </div>
-            <div className="rating-distribution sm:max-w-[400px] w-full flex flex-col gap-2">
+            <div className=" sm:max-w-[400px] w-full flex flex-col gap-2">
               {ratingDistribution.map((count, index) => (
                 <div key={index} className="flex items-center">
                   <span className="w-4">{5 - index}</span>
@@ -148,28 +139,31 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
           <Divider className="my-4" />
         </>
       )}
-      <div className="comments-section">
+      <div>
         {reviews
           .filter((review) => review.comment)
           .map((review) => (
             <div key={review.id} className="review mb-4">
               <div className="review-header flex items-center">
-                <Image
-                  src={review.userImage}
-                  alt={review.user}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
+                <Avatar
+                  src={review.farmer ? review.farmer.image : ""}
+                  alt={
+                    review.farmer ? review.farmer.name : review.user.username
+                  }
                 />
                 <div className="ml-4">
-                  <p className="font-bold">{review.user}</p>
-                  <p className="text-gray-500 text-sm">{review.date}</p>
+                  <p className="font-bold">
+                    {review.farmer ? review.farmer.name : review.user.username}
+                  </p>
+                  <p className="text-gray-500 text-sm">
+                    {review.createdAt.toLocaleDateString()}
+                  </p>
                 </div>
                 <div className="stars flex ml-auto">
                   {[...Array(5)].map((_, i) => (
                     <MdStarRate
                       key={i}
-                      color={i < review.rating ? "gold" : "gray"}
+                      color={i < review?.rating! ? "gold" : "gray"}
                       size={20}
                     />
                   ))}
@@ -188,6 +182,7 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                         className="w-full"
                         radius="sm"
                         variant="flat"
+                        disabled={isReplying}
                       />
                       <div className="flex gap-2">
                         <Button
@@ -195,6 +190,7 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                           color="danger"
                           radius="sm"
                           onClick={() => setActiveReviewId(null)}
+                          disabled={isReplying}
                         >
                           Cancel
                         </Button>
@@ -203,6 +199,8 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                           color="primary"
                           radius="sm"
                           onClick={() => handleReply(review.id)}
+                          isLoading={isReplying}
+                          isDisabled={!replyText.trim()}
                         >
                           Submit
                         </Button>
@@ -212,6 +210,7 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                     <button
                       className="hover:opacity-75 text-sm font-semibold"
                       onClick={() => setActiveReviewId(review.id)}
+                      disabled={isReplying}
                     >
                       Reply
                     </button>
@@ -222,16 +221,21 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
                 {review.replies.map((reply) => (
                   <div key={reply.id} className="reply mb-2">
                     <div className="flex items-center">
-                      <Image
-                        src={reply.userImage}
-                        alt={reply.user}
-                        width={30}
-                        height={30}
-                        className="rounded-full"
+                      <Avatar
+                        src={reply.farmer ? reply.farmer.image : ""}
+                        alt={
+                          reply.farmer ? reply.farmer.name : reply.user.username
+                        }
                       />
                       <div className="ml-4">
-                        <p className="font-bold">{reply.user}</p>
-                        <p className="text-gray-500 text-sm">{reply.date}</p>
+                        <p className="font-bold">
+                          {reply.farmer
+                            ? reply.farmer.name
+                            : reply.user.username}
+                        </p>
+                        <p className="text-gray-500 text-sm">
+                          {reply.createdAt.toLocaleDateString()}
+                        </p>
                       </div>
                     </div>
                     <p className="ml-10 mt-1">{reply.comment}</p>
@@ -241,7 +245,10 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
             </div>
           ))}
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => !isAddingReview && setIsModalOpen(false)}
+      >
         <ModalContent>
           <ModalHeader>Add a Review</ModalHeader>
           <ModalBody>
@@ -266,7 +273,14 @@ const ReviewsComponent: React.FC<ReviewsComponentProps> = ({
             />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={handleAddReview}>Submit</Button>
+            <Button
+              onClick={handleAddReview}
+              isLoading={isAddingReview}
+              color="primary"
+              isDisabled={!newRating}
+            >
+              Submit
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

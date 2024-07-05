@@ -224,7 +224,7 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
                       <div className="flex items-center gap-1">
                         <AiFillStar size={20} color="#FFC107" />
                         {item.reviews.reduce(
-                          (acc, curr) => acc + curr.rating,
+                          (acc, curr) => acc + curr?.rating!,
                           0
                         ) / item.reviews.length || "N/A"}
                       </div>
