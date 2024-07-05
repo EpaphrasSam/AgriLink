@@ -1,28 +1,19 @@
 "use client";
 
-import { Button, Avatar, AvatarGroup, Card } from "@nextui-org/react";
-import { IoIosCreate } from "react-icons/io";
+import { Avatar, Card } from "@nextui-org/react";
 import Link from "next/link";
+import { formatDate } from "@/helpers/formatDate";
+import { ForumWithPost } from "@/types/InteractionTypes";
 
 interface ForumCardProps {
-  forum: {
-    id: number;
-    title: string;
-    author: {
-      name: string;
-      avatar: string;
-    };
-    summary: string;
-    replies: number;
-    participants: string[];
-  };
+  forum: ForumWithPost;
   isFarmer?: boolean;
 }
 
-const ForumCard: React.FC<ForumCardProps> = ({
-  forum: { id, title, author, summary, replies, participants },
+const ForumCard = ({
+  forum: { id, title, summary, createdAt, createdBy, posts },
   isFarmer = false,
-}) => {
+}: ForumCardProps) => {
   return (
     <Link
       href={
@@ -31,21 +22,21 @@ const ForumCard: React.FC<ForumCardProps> = ({
       key={id}
     >
       <Card isPressable fullWidth className="mb-6 p-4">
-        <div className="flex items-center mb-2">
-          <Avatar src={author.avatar} />
-          <div className="ml-3">
-            <h2 className="text-lg font-semibold">{title}</h2>
-            <p className="text-sm text-gray-500">Started by {author.name}</p>
+        <div className="flex flex-row gap-2 mb-2">
+          <Avatar alt={createdBy.username} size="lg" />
+          <div className="flex flex-col items-start">
+            <h2 className="text-xl font-semibold text-gray-700">{title}</h2>
+            <p className="text-base font-medium text-gray-500">
+              {createdBy.username}
+            </p>
           </div>
         </div>
         <p className="text-gray-700 mb-2">{summary}</p>
-        <div className="flex items-center w-full justify-between">
-          <p className="text-sm text-gray-500">{replies} replies</p>
-          <AvatarGroup>
-            {participants.map((avatar, index) => (
-              <Avatar key={index} src={avatar} size="sm" />
-            ))}
-          </AvatarGroup>
+        <div className="w-full flex flex-row items-center justify-between">
+          <p className="text-sm text-gray-500">{posts.length} replies</p>
+          <p className="text-sm text-gray-500">
+            {formatDate(createdAt.toString())}
+          </p>
         </div>
       </Card>
     </Link>

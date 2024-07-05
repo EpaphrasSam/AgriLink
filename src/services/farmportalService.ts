@@ -320,3 +320,41 @@ export const getFarmerAndProductReviews = async (farmerId: string) => {
     return { farmer: null, error: "Something went wrong" };
   }
 };
+
+export const getFarmerInteractions = async (farmerId: string) => {
+  try {
+    const forums = await prisma.forum.findMany({
+      include: {
+        posts: {
+          include: {
+            user: true,
+            replies: {
+              include: {
+                user: true,
+                replies: {
+                  include: {
+                    user: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        createdBy: true,
+      },
+    });
+
+    const conversations = await prisma.conversation.findMany({
+      include: {
+        messages: true,
+      },
+    });
+
+    return { interactions: { forums, conversations }, error: null };
+  } catch (error) {
+    return {
+      interactions: { forums: [], conversations: [] },
+      error: "Something went wrong",
+    };
+  }
+};
