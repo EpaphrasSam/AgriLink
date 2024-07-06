@@ -345,8 +345,16 @@ export const getFarmerInteractions = async (farmerId: string) => {
     });
 
     const conversations = await prisma.conversation.findMany({
+      where: { farmerId: farmerId },
       include: {
-        messages: true,
+        user: true,
+        farmer: true,
+        messages: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 1,
+        },
       },
     });
 

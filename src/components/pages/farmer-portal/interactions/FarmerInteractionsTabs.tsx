@@ -3,14 +3,14 @@
 import { Tab, Tabs } from "@nextui-org/react";
 import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ForumWithPost } from "@/types/InteractionTypes";
+import { ConversationItemType, ForumWithPost } from "@/types/InteractionTypes";
 import ConversationListing from "../../chat/conversation/ConversationListing";
 import ForumCard from "../../forum/ForumCard";
 
 interface FarmerInteractionsTabsProps {
   interactions: {
     forums: ForumWithPost[];
-    conversations: any[];
+    conversations: ConversationItemType[];
   };
 }
 
@@ -43,7 +43,10 @@ const FarmerInteractionsTabs = ({
         ))}
       </Tab>
       <Tab key="chats" title="Chats">
-        <ConversationListing />;
+        <ConversationListing
+          conversations={interactions.conversations}
+          isFarmer={true}
+        />
       </Tab>
     </Tabs>
   );

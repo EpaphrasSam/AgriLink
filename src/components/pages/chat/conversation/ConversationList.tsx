@@ -1,28 +1,24 @@
 import React from "react";
 import ConversationItem from "./ConversationItem";
+import { ConversationItemType } from "@/types/InteractionTypes";
 
 interface ConversationListProps {
-  conversations: {
-    id: string;
-    user: {
-      name: string;
-      avatar: string;
-    };
-    lastMessage: {
-      body?: string;
-      imageUrl?: string;
-      timestamp: string;
-    };
-  }[];
+  conversations: ConversationItemType[];
+  isFarmer: boolean;
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
   conversations,
+  isFarmer,
 }) => {
   return (
     <div className="w-full">
       {conversations.map((conversation) => (
-        <ConversationItem key={conversation.id} conversation={conversation} />
+        <ConversationItem
+          key={conversation.id}
+          conversation={conversation}
+          isFarmer={isFarmer}
+        />
       ))}
     </div>
   );

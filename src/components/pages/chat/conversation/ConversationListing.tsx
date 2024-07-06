@@ -1,41 +1,28 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ConversationList from "./ConversationList";
+import { ConversationItemType } from "@/types/InteractionTypes";
 
-const mockConversations = [
-  {
-    id: "1",
-    user: {
-      name: "Alice",
-      avatar: "/logo.png",
-    },
-    lastMessage: {
-      body: "Hello! How are you?",
-      timestamp: new Date().toISOString(),
-    },
-  },
-  {
-    id: "2",
-    user: {
-      name: "Bob",
-      avatar: "/logo.png",
-    },
-    lastMessage: {
-      imageUrl: "/path/to/image.jpg",
-      timestamp: new Date().toISOString(),
-    },
-  },
-];
+interface ConversationListingProps {
+  conversations: ConversationItemType[];
+  isFarmer: boolean;
+}
 
-const ConversationListing: React.FC = () => {
-  const [conversations, setConversations] = useState(mockConversations);
-
-  useEffect(() => {}, []);
-
+const ConversationListing: React.FC<ConversationListingProps> = ({
+  conversations,
+  isFarmer,
+}) => {
+  if (conversations.length === 0) {
+    return (
+      <div className="h-screen flex items-center justify-center text-3xl text-gray-600">
+        No conversations found
+      </div>
+    );
+  }
   return (
     <div className="max-w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-      <ConversationList conversations={conversations} />
+      <ConversationList conversations={conversations} isFarmer={isFarmer} />
     </div>
   );
 };

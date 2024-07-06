@@ -55,7 +55,7 @@ const FarmersAbout = ({ farmer, reviews }: AboutProp) => {
         <h2 className="text-2xl font-bold mb-4">About Our Farm</h2>
         <p className="text-gray-700 mb-4">{farmer.about}</p>
         <div className="flex justify-end items-end">
-          <Link href={`/farmers/chat/1`}>
+          <Link href={`/farmers/chat/${farmer.id}`}>
             <Button
               className="mt-2"
               variant="flat"

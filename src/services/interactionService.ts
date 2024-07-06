@@ -1,6 +1,9 @@
 "use server";
 
-import { ForumPostsWithReplies } from "@/types/InteractionTypes";
+import {
+  ConversationWithDetails,
+  ForumPostsWithReplies,
+} from "@/types/InteractionTypes";
 import { auth } from "@/utils/auth/auth";
 import prisma from "@/utils/prisma";
 import { revalidatePath } from "next/cache";
@@ -124,5 +127,89 @@ export const addReply = async (data: {
     return { newReply, error: null };
   } catch (error: any) {
     return { newReply: null, error: error.message };
+  }
+};
+
+export const getOrCreateConversation = async (
+  userId: string,
+  farmerId: string
+) => {
+  try {
+    let conversation = await prisma.conversation.findFirst({
+      where: {
+        userId,
+        farmerId,
+      },
+      include: {
+        user: true,
+        farmer: true,
+        messages: {
+          include: {
+            senderUser: true,
+            senderFarmer: true,
+          },
+        },
+      },
+    });
+
+    if (!conversation) {
+      conversation = await prisma.conversation.create({
+        data: {
+          userId,
+          farmerId,
+        },
+
+        include: {
+          user: true,
+          farmer: true,
+          messages: {
+            include: {
+              senderUser: true,
+              senderFarmer: true,
+            },
+          },
+        },
+      });
+    }
+
+    const transformedMessages = conversation.messages.map((message) => ({
+      ...message,
+      senderUser: message.senderUser || undefined,
+      senderFarmer: message.senderFarmer || undefined,
+    }));
+
+    const transformedConversation: ConversationWithDetails = {
+      ...conversation,
+      messages: transformedMessages,
+    };
+
+    return { conversation: transformedConversation, error: null };
+  } catch (error: any) {
+    return { conversation: null, error: error.message };
+  }
+};
+
+export const getAllConversations = async (
+  userId: string,
+  isFarmer: boolean
+) => {
+  try {
+    const conversations = await prisma.conversation.findMany({
+      where: isFarmer ? { farmerId: userId } : { userId },
+      include: {
+        user: true,
+        farmer: true,
+        messages: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 1,
+        },
+      },
+    });
+
+    return { conversations, error: null };
+  } catch (error: any) {
+    return { conversations: [], error: error.message };
   }
 };

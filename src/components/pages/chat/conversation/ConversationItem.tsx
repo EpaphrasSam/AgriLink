@@ -3,50 +3,52 @@ import { Avatar } from "@nextui-org/react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { FaImage } from "react-icons/fa";
+import { ConversationItemType } from "@/types/InteractionTypes";
 
 interface ConversationItemProps {
-  conversation: {
-    id: string;
-    user: {
-      name: string;
-      avatar: string;
-    };
-    lastMessage: {
-      body?: string;
-      imageUrl?: string;
-      timestamp: string;
-    };
-  };
+  conversation: ConversationItemType;
+  isFarmer: boolean;
 }
 
 const ConversationItem: React.FC<ConversationItemProps> = ({
   conversation,
+  isFarmer,
 }) => {
-  const isFarmer = false;
+  const lastMessage = conversation.messages[0];
+  const displayName = isFarmer
+    ? conversation.user.username
+    : conversation.farmer.name;
+  const avatar = isFarmer ? "" : conversation.farmer.image;
+
+  const isOwnMessage = isFarmer
+    ? lastMessage.senderFarmerId === conversation.farmer.id
+    : lastMessage.senderUserId === conversation.user.id;
+
   return (
     <Link
       href={
         isFarmer
-          ? `/farmer-portal/interactions/chat/${conversation.id}`
-          : `/farmers/chat/${conversation.id}`
+          ? `/farmer-portal/interactions/chat/${conversation.user.id}`
+          : `/farmers/chat/${conversation.farmer.id}`
       }
       className="flex items-center p-4 border-b cursor-pointer hover:bg-gray-100"
     >
       <Avatar
-        src={conversation.user.avatar}
-        alt={conversation.user.name}
+        src={avatar || ""}
+        alt={displayName}
         className="w-12 h-12 rounded-full"
       />
       <div className="ml-4 flex-1">
         <div className="flex justify-between items-center">
-          <h4 className="text-lg font-semibold">{conversation.user.name}</h4>
+          <h4 className="text-lg font-semibold">{displayName}</h4>
           <span className="text-sm text-gray-500">
-            {format(new Date(conversation.lastMessage.timestamp), "p")}
+            {format(new Date(lastMessage.createdAt), "p")}
           </span>
         </div>
         <p className="text-sm text-gray-500 truncate">
-          {conversation.lastMessage.body ? (
-            conversation.lastMessage.body
+          {isOwnMessage && "YOU: "}
+          {lastMessage.content ? (
+            lastMessage.content
           ) : (
             <span className="flex items-center">
               <FaImage className="mr-1" /> Photo
