@@ -15,7 +15,7 @@ export default function FarmerLayout({
         <div className="max-md:sticky max-md:bottom-0 max-md:mb-0 md:sticky md:top-0 md:self-start md:h-screen z-10 bg-white backdrop-filter backdrop-blur-lg">
           <FarmerSideBar />
         </div>
-        <div className="flex-1 flex-grow">{children}</div>
+        <div className="flex-1 flex-grow overflow-auto">{children}</div>
       </div>
     </div>
   );
