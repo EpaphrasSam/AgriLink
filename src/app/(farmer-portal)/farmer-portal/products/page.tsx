@@ -18,7 +18,7 @@ export default async function FarmersProductsPage() {
         </span>
       </div>
       <Divider className="my-4" />
-      <ProductsTable products={products} />
+      <ProductsTable products={products!} />
     </div>
   );
 }

@@ -154,7 +154,15 @@ export const getFarmerProducts = async (farmerId: string) => {
     const products = await prisma.product.findMany({
       where: { farmerId },
       include: {
-        reviews: true,
+        reviews: {
+          where: {
+            OR: [
+              { parentReviewId: null },
+              { parentReviewId: { isSet: false } },
+            ],
+          },
+        },
+        farmer: true,
       },
     });
 
