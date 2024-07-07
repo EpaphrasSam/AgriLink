@@ -30,8 +30,6 @@ async function validateUser(
     },
   });
 
-  console.log(user);
-
   if (!user || !user.password) {
     throw new Error("Invalid credentials");
   }

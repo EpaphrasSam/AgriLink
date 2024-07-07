@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import {
   CustomLeftArrow,
@@ -10,6 +10,7 @@ import Carousel from "react-multi-carousel";
 import { Product, Review } from "@prisma/client";
 import ProductCard from "@/components/global/ProductCard";
 import { ProductWithReviews } from "@/types/ProductTypes";
+import SkeletonLoader from "@/components/global/SkeletonLoader";
 
 const responsive = {
   LargeDesktop: {
@@ -39,19 +40,35 @@ interface RecentProductsProps {
 }
 
 const RecentProducts = ({ products }: RecentProductsProps) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (products) {
+      setLoading(false);
+    }
+  }, [products]);
+
   return (
-    <div className="w-full py-4">
-      <Carousel
-        responsive={responsive}
-        ssr={true}
-        customLeftArrow={<CustomLeftArrow />}
-        customRightArrow={<CustomRightArrow />}
-        swipeable
-      >
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </Carousel>
+    <div className="min-h-[300px] w-full py-4">
+      {loading ? (
+        <SkeletonLoader />
+      ) : products.length === 0 ? (
+        <div className="flex items-center text-gray-500 font-semibold justify-center">
+          No products found
+        </div>
+      ) : (
+        <Carousel
+          responsive={responsive}
+          ssr={true}
+          customLeftArrow={<CustomLeftArrow />}
+          customRightArrow={<CustomRightArrow />}
+          swipeable
+        >
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </Carousel>
+      )}
     </div>
   );
 };
