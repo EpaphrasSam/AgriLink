@@ -3,6 +3,8 @@ import { Divider } from "@nextui-org/react";
 import { getFarmerProducts } from "@/services/farmportalService";
 import { auth } from "@/utils/auth/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function FarmersProductsPage() {
   const session = await auth();
   const farmerId = session?.user?.farmerDetails?.id;

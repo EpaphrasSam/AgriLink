@@ -4,6 +4,8 @@ import { getFarmerOrders, getFarmerStats } from "@/services/farmportalService";
 import { auth } from "@/utils/auth/auth";
 import { Divider } from "@nextui-org/react";
 
+export const dynamic = "force-dynamic";
+
 export default async function FarmerDashboard() {
   const session = await auth();
   const { stats, error: statsError } = await getFarmerStats(

@@ -2,6 +2,8 @@ import FarmersReviewsTabs from "@/components/pages/farmer-portal/reviews/Farmers
 import { getFarmerAndProductReviews } from "@/services/farmportalService";
 import { auth } from "@/utils/auth/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function ReviewsPage() {
   const session = await auth();
   const { farmer, error } = await getFarmerAndProductReviews(

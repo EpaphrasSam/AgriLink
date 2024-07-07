@@ -1,6 +1,8 @@
 import FarmerProfile from "@/components/pages/farmer-portal/profile/FarmerProfile";
 import { auth } from "@/utils/auth/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function FarmerProfilePage() {
   const session = await auth();
   return (

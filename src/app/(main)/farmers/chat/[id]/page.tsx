@@ -2,6 +2,8 @@ import Chat from "@/components/pages/chat/Chat";
 import { getOrCreateConversation } from "@/services/interactionService";
 import { auth } from "@/utils/auth/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function ChatPage({
   params: { id },
 }: {

@@ -10,6 +10,8 @@ import {
   getRecentProducts,
 } from "@/services/productsService";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const { farmers: topRatedFarmers } = await getTopRatedFarmers();
   const { products: popularProducts } = await getPopularProducts();

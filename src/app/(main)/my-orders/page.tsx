@@ -3,6 +3,8 @@ import { auth } from "@/utils/auth/auth";
 import { getMyOrders } from "@/services/ordersService";
 import { Divider } from "@nextui-org/react";
 
+export const dynamic = "force-dynamic";
+
 export default async function MyOrdersPage() {
   const session = await auth();
   const { orders, error } = await getMyOrders(session?.user?.id!);

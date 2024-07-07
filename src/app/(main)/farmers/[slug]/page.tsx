@@ -1,6 +1,8 @@
 import FarmerPage from "@/components/pages/farmers/FarmerPage";
 import { getFarmerBySlug } from "@/services/farmersService";
 
+export const dynamic = "force-dynamic";
+
 export default async function FarmersPage({
   params,
 }: {

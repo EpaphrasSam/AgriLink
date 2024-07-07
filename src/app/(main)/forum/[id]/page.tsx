@@ -3,6 +3,8 @@ import { getForumPostById } from "@/services/interactionService";
 import { Spinner } from "@nextui-org/react";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page({
   params: { id },
 }: {

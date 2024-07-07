@@ -1,6 +1,8 @@
 import ForumListing from "@/components/pages/forum/ForumListing";
 import { fetchAllForumPost } from "@/services/interactionService";
 
+export const dynamic = "force-dynamic";
+
 export default async function Forum() {
   const { forums, error } = await fetchAllForumPost();
   return (

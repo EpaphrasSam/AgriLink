@@ -2,6 +2,8 @@ import FarmerInteractionsTabs from "@/components/pages/farmer-portal/interaction
 import { getFarmerInteractions } from "@/services/farmportalService";
 import { auth } from "@/utils/auth/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function FarmerInteractionsPage() {
   const session = await auth();
   const { interactions, error } = await getFarmerInteractions(
