@@ -68,15 +68,13 @@ const TopRatedFarmers = ({ farmers }: TopRatedFarmersProps) => {
             <Link
               href={`/farmers/${farmer.slug}`}
               key={farmer.id}
-              className="flex flex-col justify-center m-2 transition-all duration-300 hover:scale-105"
+              className="flex flex-col h-[350px] justify-center m-2 transition-all duration-300 hover:scale-105"
             >
-              <div className="max-w-md rounded-lg overflow-hidden shadow-sm bg-white ">
+              <div className="max-w-md h-[200px] rounded-lg overflow-hidden shadow-sm bg-white ">
                 <Image
                   src={farmer.image}
                   alt={farmer.name}
-                  width="100%"
-                  height={300}
-                  className="w-full object-cover"
+                  className="w-full h-full object-cover"
                   isZoomed
                 />
               </div>
