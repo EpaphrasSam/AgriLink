@@ -42,7 +42,7 @@ const ForumPage = ({ forum }: ForumPageProps) => {
       });
       setLoading(false);
       if (error) {
-        toast.error(error);
+        toast.error("Failed to add reply");
       } else {
         toast.success("Reply added successfully!");
         setReplyContent("");

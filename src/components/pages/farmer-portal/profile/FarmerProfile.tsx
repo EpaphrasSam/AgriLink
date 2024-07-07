@@ -37,7 +37,7 @@ interface EditingState {
   region: boolean;
   town: boolean;
   image: boolean;
-  paystackAccountId: boolean;
+  paystackSubAccountCode: boolean;
 }
 
 interface FarmerProfileProps {
@@ -49,7 +49,7 @@ interface FarmerProfileProps {
     about: string;
     town: string;
     image: string;
-    paystackAccountId: string | null;
+    paystackSubAccountCode: string | null;
   } | null;
   username: string;
 }
@@ -78,12 +78,12 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
     region: false,
     town: false,
     image: false,
-    paystackAccountId: false,
+    paystackSubAccountCode: false,
   });
 
-  const [paystackAccountId, setPaystackAccountId] = useState<string | null>(
-    farmerDetails?.paystackAccountId || null
-  );
+  const [paystackSubAccountCode, setPaystackSubAccountCode] = useState<
+    string | null
+  >(farmerDetails?.paystackSubAccountCode || null);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -104,8 +104,8 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
         [field]: farmDetails[field as keyof FarmDetails],
       };
 
-      if (field === "paystackAccountId" && paystackAccountId) {
-        updatedDetails.paystackAccountId = paystackAccountId;
+      if (field === "paystackSubAccountCode" && paystackSubAccountCode) {
+        updatedDetails.paystackSubAccountCode = paystackSubAccountCode;
       }
 
       const response = await updateFarmerDetails(
@@ -117,7 +117,7 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
         await loginAction(username, "123456", Role.FARMER, true);
         window.location.reload();
       } else {
-        toast.error(response.error || "Failed to update details");
+        toast.error("Failed to update details");
       }
     } catch (error) {
       toast.error("An error occurred while updating details");
@@ -134,8 +134,10 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
     }));
   };
 
-  const handlePaystackAccountIdChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPaystackAccountId(e.target.value);
+  const handlePaystackSubAccountCodeChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setPaystackSubAccountCode(e.target.value);
   };
 
   const handleUpload = async (result: any) => {
@@ -283,32 +285,32 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
         </p>
         <Card className="mb-4">
           <CardBody>
-            {paystackAccountId ? (
+            {paystackSubAccountCode ? (
               <div
                 className={`flex w-full gap-2 items-start ${
-                  isEditing.paystackAccountId ? "flex-col" : "flex-row"
+                  isEditing.paystackSubAccountCode ? "flex-col" : "flex-row"
                 }`}
               >
-                {isEditing.paystackAccountId ? (
+                {isEditing.paystackSubAccountCode ? (
                   <>
                     <Input
                       name="paystackAccountId"
-                      value={paystackAccountId || ""}
-                      onChange={handlePaystackAccountIdChange}
+                      value={paystackSubAccountCode || ""}
+                      onChange={handlePaystackSubAccountCodeChange}
                       fullWidth
                     />
                     <div className="flex space-x-2">
                       <Button
-                        onClick={() => handleSave("paystackAccountId")}
+                        onClick={() => handleSave("paystackSubAccountCode")}
                         color="primary"
                         isLoading={
-                          isLoading && loadingState === "paystackAccountId"
+                          isLoading && loadingState === "paystackSubAccountCode"
                         }
                       >
                         Save
                       </Button>
                       <Button
-                        onClick={() => handleCancel("paystackAccountId")}
+                        onClick={() => handleCancel("paystackSubAccountCode")}
                         color="danger"
                       >
                         Cancel
@@ -318,7 +320,7 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
                 ) : (
                   <>
                     <p className="text-base font-medium flex-1">
-                      {paystackAccountId}
+                      {paystackSubAccountCode}
                     </p>
                     <FaEdit
                       className="cursor-pointer text-gray-500 hover:opacity-75"
@@ -326,7 +328,7 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
                       onClick={() =>
                         setIsEditing((prev) => ({
                           ...prev,
-                          paystackAccountId: true,
+                          paystackSubAccountCode: true,
                         }))
                       }
                     />
@@ -335,26 +337,26 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
               </div>
             ) : (
               <div className="flex w-full">
-                {isEditing.paystackAccountId ? (
+                {isEditing.paystackSubAccountCode ? (
                   <div className="flex flex-col gap-2 w-full">
                     <Input
                       name="paystackAccountId"
-                      value={paystackAccountId || ""}
-                      onChange={handlePaystackAccountIdChange}
+                      value={paystackSubAccountCode || ""}
+                      onChange={handlePaystackSubAccountCodeChange}
                       className="w-full"
                     />
                     <div className="flex space-x-2">
                       <Button
-                        onClick={() => handleSave("paystackAccountId")}
+                        onClick={() => handleSave("paystackSubAccountCode")}
                         color="primary"
                         isLoading={
-                          isLoading && loadingState === "paystackAccountId"
+                          isLoading && loadingState === "paystackSubAccountCode"
                         }
                       >
                         Save
                       </Button>
                       <Button
-                        onClick={() => handleCancel("paystackAccountId")}
+                        onClick={() => handleCancel("paystackSubAccountCode")}
                         color="danger"
                       >
                         Cancel
@@ -367,14 +369,14 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
                       onClick={() =>
                         setIsEditing((prev) => ({
                           ...prev,
-                          paystackAccountId: true,
+                          paystackSubAccountCode: true,
                         }))
                       }
                       color="primary"
                       className="max-w-md"
                       fullWidth
                     >
-                      Add Payment Link
+                      Add PayStack Sub Account Code
                     </Button>
                   </div>
                 )}

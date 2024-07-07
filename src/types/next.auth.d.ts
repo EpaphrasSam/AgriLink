@@ -17,7 +17,7 @@ declare module "next-auth" {
         about: string;
         town: string;
         image: string;
-        paystackAccountId: string | null;
+        paystackSubAccountCode: string | null;
       } | null;
     };
   }

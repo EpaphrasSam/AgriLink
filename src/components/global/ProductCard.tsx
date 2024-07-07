@@ -27,16 +27,14 @@ const ProductCard = ({ product, showFarmer = true }: CardItemsProps) => {
     <>
       <div
         key={product.id}
-        className="flex flex-col max-w-[250px] justify-center m-2"
+        className="flex flex-col h-[350px] max-w-[250px] justify-center m-2"
       >
-        <div className="w-full rounded-lg overflow-hidden shadow-sm bg-white ">
+        <div className="w-full h-[200px] rounded-lg overflow-hidden shadow-sm bg-white ">
           <Link href={`/products/${product.slug}`}>
             <Image
               src={product.images[0]}
               alt={product.name}
-              width="100%"
-              height={300}
-              className="w-full object-cover"
+              className="w-full h-full object-cover object-center"
               isZoomed
             />
           </Link>

@@ -24,23 +24,23 @@ model User {
 }
 
 model Farmer {
-  id                  String         @id @default(auto()) @map("_id") @db.ObjectId
-  user                User           @relation(fields: [userId], references: [id])
-  userId              String         @unique @db.ObjectId
-  name                String
-  bio                 String
-  about               String
-  region              String
-  town                String
-  image               String
-  slug                String        @unique
-  products            Product[]
-  conversations       Conversation[]
-  messages            Message[] @relation("FarmerMessages")
-  reviews             Review[]
-  orders              Order[] @relation("FarmerOrders")
-  paystackAccountId   String?
-  createdAt           DateTime @default(now())
+  id                       String         @id @default(auto()) @map("_id") @db.ObjectId
+  user                     User           @relation(fields: [userId], references: [id])
+  userId                   String         @unique @db.ObjectId
+  name                     String
+  bio                      String
+  about                    String
+  region                   String
+  town                     String
+  image                    String
+  slug                     String        @unique
+  products                 Product[]
+  conversations            Conversation[]
+  messages                 Message[] @relation("FarmerMessages")
+  reviews                  Review[]
+  orders                   Order[] @relation("FarmerOrders")
+  paystackSubAccountCode   String?
+  createdAt                DateTime @default(now())
 }
 
 model Product {
@@ -64,6 +64,7 @@ model Order {
   createdAt   DateTime @default(now())
   amount      Float
   address     String
+  name        String
   contact     String
   quantity    Int
   user        User     @relation(fields: [userId], references: [id])

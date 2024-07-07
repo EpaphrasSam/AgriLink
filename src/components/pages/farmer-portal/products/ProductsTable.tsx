@@ -144,6 +144,13 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
           radius="sm"
           startContent={<AiOutlinePlus size={24} />}
           onClick={() => {
+            if (
+              session &&
+              !session.user.farmerDetails?.paystackSubAccountCode
+            ) {
+              toast.error("Add PayStack SubAccount to add products");
+              return;
+            }
             setSelectedProduct(null);
             setIsModalOpen(true);
           }}

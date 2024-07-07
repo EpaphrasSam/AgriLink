@@ -24,7 +24,7 @@ async function validateUser(
           region: true,
           town: true,
           image: true,
-          paystackAccountId: true,
+          paystackSubAccountCode: true,
         },
       },
     },

@@ -25,7 +25,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
           </div>
 
           <div className="flex gap-1 items-center">
-            <p className="text-sm">GHS{product?.price}</p>
+            <p className="text-sm">GHS {product?.price}</p>
             <p className="text-[14px] justify-end flex text-gray-500">
               x {product?.quantity}
             </p>
@@ -37,6 +37,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
 };
 
 const OrderAccordion = ({ data, type }: { data: any; type: string }) => {
+  console.log(data);
   const renderAccordionSummary = () => {
     return (
       <AccordionSummary

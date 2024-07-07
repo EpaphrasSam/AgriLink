@@ -82,7 +82,7 @@ export const getFarmerOrders = async (
       orderID: order.orderID,
       createdAt: order.createdAt,
       amount: order.amount,
-      userName: order.user.username,
+      userName: order.name,
       userEmail: order.user.email,
       contact: order.contact,
       shippingStatus: order.status,

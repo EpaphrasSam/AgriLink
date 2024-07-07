@@ -335,7 +335,10 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
 
                     <TableCell>
                       <OrderAccordion
-                        data={[item.quantity, ...item.products]}
+                        data={item.products.map((product) => ({
+                          ...product,
+                          quantity: item.quantity,
+                        }))}
                         type="Products"
                       />
                     </TableCell>
