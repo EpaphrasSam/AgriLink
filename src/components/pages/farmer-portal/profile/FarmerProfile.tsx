@@ -6,12 +6,20 @@ import {
   Textarea,
   Button,
   Avatar,
+  Autocomplete,
+  AutocompleteItem,
   Select,
   Divider,
   SelectItem,
   Card,
   CardBody,
   Spinner,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalContent,
+  useDisclosure,
 } from "@nextui-org/react";
 import { FaEdit, FaCamera } from "react-icons/fa";
 import { regions } from "@/lib/constants";
@@ -20,6 +28,7 @@ import toast from "react-hot-toast";
 import { updateFarmerDetails } from "@/services/farmportalService";
 import { loginAction } from "@/services/authService";
 import { Role } from "@prisma/client";
+import axios from "axios";
 
 interface FarmDetails {
   image: string;
@@ -85,6 +94,29 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
     string | null
   >(farmerDetails?.paystackSubAccountCode || null);
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [hasCreated, setHasCreated] = useState(false);
+  const [businessName, setBusinessName] = useState("");
+  const [bankCode, setBankCode] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [banks, setBanks] = useState([]);
+
+  useEffect(() => {
+    async function loadBanks() {
+      try {
+        const response = await axios.get("/api/payment/banks");
+        if (response.data.success) {
+          setBanks(response.data.banks);
+        } else {
+          toast.error("Failed to load banks");
+        }
+      } catch (error) {
+        toast.error("Error loading banks");
+      }
+    }
+    loadBanks();
+  }, []);
+
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -124,6 +156,10 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
     } finally {
       setIsLoading(false);
       setLoadingState(null);
+      if (field === "paystackSubAccountCode") {
+        onOpenChange();
+      }
+      setHasCreated(false);
     }
   };
 
@@ -155,6 +191,37 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
       toast.error("Error uploading profile picture");
     }
   };
+
+  const handleCreateSubaccount = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post("/api/payment/subaccount", {
+        businessName,
+        bankCode,
+        accountNumber,
+      });
+
+      if (response.data.success) {
+        const subaccountCode = response.data.subaccountCode;
+        setPaystackSubAccountCode(subaccountCode);
+        setHasCreated(true);
+        toast.success("Subaccount created successfully");
+      } else {
+        toast.error("Error creating subaccount");
+      }
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error("Error creating subaccount");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (paystackSubAccountCode && hasCreated) {
+      handleSave("paystackSubAccountCode");
+    }
+  }, [paystackSubAccountCode, hasCreated]);
 
   useEffect(() => {
     if (isEditing.image) {
@@ -322,7 +389,7 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
                     <p className="text-base font-medium flex-1">
                       {paystackSubAccountCode}
                     </p>
-                    <FaEdit
+                    {/* <FaEdit
                       className="cursor-pointer text-gray-500 hover:opacity-75"
                       size={20}
                       onClick={() =>
@@ -331,60 +398,70 @@ const FarmerProfile: React.FC<FarmerProfileProps> = ({
                           paystackSubAccountCode: true,
                         }))
                       }
-                    />
+                    /> */}
                   </>
                 )}
               </div>
             ) : (
-              <div className="flex w-full">
-                {isEditing.paystackSubAccountCode ? (
-                  <div className="flex flex-col gap-2 w-full">
-                    <Input
-                      name="paystackAccountId"
-                      value={paystackSubAccountCode || ""}
-                      onChange={handlePaystackSubAccountCodeChange}
-                      className="w-full"
-                    />
-                    <div className="flex space-x-2">
-                      <Button
-                        onClick={() => handleSave("paystackSubAccountCode")}
-                        color="primary"
-                        isLoading={
-                          isLoading && loadingState === "paystackSubAccountCode"
-                        }
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        onClick={() => handleCancel("paystackSubAccountCode")}
-                        color="danger"
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex w-full justify-center">
-                    <Button
-                      onClick={() =>
-                        setIsEditing((prev) => ({
-                          ...prev,
-                          paystackSubAccountCode: true,
-                        }))
-                      }
-                      color="primary"
-                      className="max-w-md"
-                      fullWidth
-                    >
-                      Add PayStack Sub Account Code
-                    </Button>
-                  </div>
-                )}
+              <div className="flex w-full justify-center">
+                <Button
+                  onClick={onOpen}
+                  color="primary"
+                  className="max-w-md"
+                  fullWidth
+                >
+                  Add PayStack Sub Account
+                </Button>
               </div>
             )}
           </CardBody>
         </Card>
       </section>
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          <ModalHeader>Add PayStack Sub Account</ModalHeader>
+          <ModalBody>
+            <Input
+              label="Business Name"
+              value={businessName}
+              onChange={(e) => setBusinessName(e.target.value)}
+              fullWidth
+            />
+            <Autocomplete
+              label="Bank"
+              selectedKey={bankCode}
+              onSelectionChange={(keys: any) => setBankCode(keys)}
+              fullWidth
+            >
+              {banks.map((bank: any) => (
+                <AutocompleteItem key={bank.code} value={bank.code}>
+                  {bank.name}
+                </AutocompleteItem>
+              ))}
+            </Autocomplete>
+            <Input
+              label="Account Number"
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
+              fullWidth
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              onClick={handleCreateSubaccount}
+              color="primary"
+              isLoading={isLoading}
+              isDisabled={!businessName || !bankCode || !accountNumber}
+            >
+              Create Subaccount
+            </Button>
+            <Button onClick={onOpenChange} color="danger">
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
