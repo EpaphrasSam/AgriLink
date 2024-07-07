@@ -208,6 +208,12 @@ export const getAllConversations = async (
       },
     });
 
+    const filteredConversations = conversations.filter(
+      (conversation) => conversation.messages.length > 0
+    );
+
+    return { conversations: filteredConversations, error: null };
+
     return { conversations, error: null };
   } catch (error: any) {
     return { conversations: [], error: error.message };

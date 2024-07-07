@@ -366,7 +366,14 @@ export const getFarmerInteractions = async (farmerId: string) => {
       },
     });
 
-    return { interactions: { forums, conversations }, error: null };
+    const filteredConversations = conversations.filter(
+      (conversation) => conversation.messages.length > 0
+    );
+
+    return {
+      interactions: { forums, conversations: filteredConversations },
+      error: null,
+    };
   } catch (error) {
     return {
       interactions: { forums: [], conversations: [] },

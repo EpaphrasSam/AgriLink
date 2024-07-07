@@ -270,7 +270,8 @@ const Checkout = () => {
             <Button
               size="lg"
               fullWidth
-              className="bg-yellow-500 text-white px-6 py-3 rounded hover:bg-yellow-600"
+              color="success"
+              className=" text-white px-6 py-3 rounded "
               type="submit"
               isLoading={isLoading}
             >
