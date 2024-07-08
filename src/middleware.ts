@@ -19,13 +19,11 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/", req.url));
     }
   } else {
-    const { role } = session.user;
-
-    if (role === "FARMER" && !pathname.startsWith("/farmer-portal")) {
+    if (session.user.farmerDetails && !pathname.startsWith("/farmer-portal")) {
       return NextResponse.redirect(new URL("/farmer-portal", req.url));
     }
 
-    if (role === "CONSUMER" && pathname.startsWith("/farmer-portal")) {
+    if (!session.user.farmerDetails && pathname.startsWith("/farmer-portal")) {
       return NextResponse.redirect(new URL("/", req.url));
     }
 

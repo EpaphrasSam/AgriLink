@@ -35,6 +35,14 @@ export async function POST(req: Request) {
       if (!user) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
       }
+      user = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          role: "FARMER",
+        },
+      });
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
 

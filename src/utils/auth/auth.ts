@@ -13,7 +13,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id;
         token.username = user.username;
         token.role = user.role;
-        if (user.role === Role.FARMER) {
+        if (user.farmer) {
           token.farmerDetails = user.farmer;
         }
       }
@@ -24,7 +24,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id;
         session.user.username = token.username;
         session.user.role = token.role;
-        if (token.role === Role.FARMER) {
+        if (token.farmerDetails) {
           session.user.farmerDetails = token.farmerDetails;
         }
       }

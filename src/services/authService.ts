@@ -18,6 +18,8 @@ export const loginAction = async (
       redirect: false,
     };
 
+    console.log(signInOptions);
+
     if (typeof logInUser === "boolean") {
       signInOptions.logInUser = logInUser;
     }

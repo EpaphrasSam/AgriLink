@@ -14,20 +14,23 @@ async function validateUser(
     where: {
       username,
     },
-    include: {
-      farmer: {
-        select: {
-          id: true,
-          name: true,
-          about: true,
-          bio: true,
-          region: true,
-          town: true,
-          image: true,
-          paystackSubAccountCode: true,
-        },
-      },
-    },
+    include:
+      loginType === Role.FARMER
+        ? {
+            farmer: {
+              select: {
+                id: true,
+                name: true,
+                about: true,
+                bio: true,
+                region: true,
+                town: true,
+                image: true,
+                paystackSubAccountCode: true,
+              },
+            },
+          }
+        : undefined,
   });
 
   if (!user || !user.password) {
