@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Image } from "@nextui-org/react";
 import {
   CustomLeftArrow,
   CustomRightArrow,
@@ -11,6 +10,7 @@ import { MdStarRate } from "react-icons/md";
 import Link from "next/link";
 import { Farmer, Review } from "@prisma/client";
 import SkeletonLoader from "@/components/global/SkeletonLoader";
+import Image from "next/image";
 
 const responsive = {
   LargeDesktop: {
@@ -74,8 +74,9 @@ const TopRatedFarmers = ({ farmers }: TopRatedFarmersProps) => {
                 <Image
                   src={farmer.image}
                   alt={farmer.name}
-                  className="w-full h-full object-cover"
-                  isZoomed
+                  className="w-full h-full object-cover object-center"
+                  width={250}
+                  height={200}
                 />
               </div>
               <div className="px-2 py-4">

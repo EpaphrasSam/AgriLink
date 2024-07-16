@@ -1,7 +1,6 @@
 import useCartStore from "@/store/useCartStore";
 import { ProductWithReviews } from "@/types/ProductTypes";
-import { Image } from "@nextui-org/react";
-import { Product, Review } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { MdStarRate } from "react-icons/md";
@@ -34,15 +33,18 @@ const ProductCard = ({ product, showFarmer = true }: CardItemsProps) => {
             <Image
               src={product.images[0]}
               alt={product.name}
-              className="w-full h-full object-cover object-center"
-              isZoomed
+              className="w-full h-full object-cover object-center hover:scale-105 transition-all duration-300"
+              width={250}
+              height={200}
             />
           </Link>
         </div>
         <div className="px-2 py-4">
           <div className="flex justify-between items-center">
-            <p className="font-bold text-xl line-clamp-1">{product.name}</p>
-            <p className="text-md font-semibold text-gray-600">
+            <p className="font-bold text-xl line-clamp-1 flex-shrink-1">
+              {product.name}
+            </p>
+            <p className="text-md font-semibold text-gray-600 flex-shrink-0">
               GHS {product.price}
             </p>
           </div>
