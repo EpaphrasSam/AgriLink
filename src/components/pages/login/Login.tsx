@@ -52,8 +52,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white-100 p-6">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-2xl">
+    <div className="flex min-h-screen items-center justify-center bg-white-100 p-4">
+      <div className="w-full max-w-md bg-white sm:p-8 p-2 rounded-lg shadow-2xl">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
@@ -92,7 +92,7 @@ const Login = () => {
           <Link href="#" className="text-red-600 hover:opacity-75 text-xs">
             Forgot your password?
           </Link>
-          <div className="flex justify-evenly gap-4 mt-4">
+          <div className="flex sm:flex-row flex-col justify-evenly gap-4 mt-4">
             <Button
               color="primary"
               type="submit"
